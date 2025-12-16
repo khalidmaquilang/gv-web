@@ -74,6 +74,12 @@
         ],
         "pre-package-uninstall": [
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
+        ],
+        "rector": [
+            "./vendor/bin/rector"
+        ],
+        "phpstan": [
+            "./vendor/bin/phpstan analyse --memory-limit=2G"
         ]
     },
     "extra": {
