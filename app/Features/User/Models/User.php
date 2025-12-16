@@ -4,22 +4,23 @@ declare(strict_types=1);
 
 namespace App\Features\User\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 /**
  * @property string $id
- * @property string|null $name
+ * @property string $name
  * @property string $username
  * @property string $email
  * @property string|null $phone
  * @property string|null $avatar
  * @property string|null $bio
  * @property \Illuminate\Support\Carbon|null $email_verified_at
- * @property string|null $password
+ * @property string $password
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -50,7 +51,7 @@ use Illuminate\Notifications\Notifiable;
  *
  * @mixin \Eloquent
  */
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory;
     use HasUuids;
@@ -76,6 +77,20 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (User $user): void {
+            $clean_name = Str::slug($user->name, '');
+
+            do {
+                $suffix = random_int(100000, 999999);
+                $candidate = $clean_name.$suffix;
+            } while (static::where('username', $candidate)->exists());
+
+            $user->username = $candidate;
+        });
+    }
 
     /**
      * Get the attributes that should be cast.

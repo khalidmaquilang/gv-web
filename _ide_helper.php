@@ -2217,6 +2217,749 @@ namespace Illuminate\Support\Facades {
 
             }
     /**
+     * @see \Illuminate\Auth\AuthManager
+     * @see \Illuminate\Auth\SessionGuard
+     */
+    class Auth {
+        /**
+         * Attempt to get the guard from the local cache.
+         *
+         * @param string|null $name
+         * @return \Illuminate\Contracts\Auth\Guard|\Illuminate\Contracts\Auth\StatefulGuard
+         * @static
+         */
+        public static function guard($name = null)
+        {
+            /** @var \Illuminate\Auth\AuthManager $instance */
+            return $instance->guard($name);
+        }
+
+        /**
+         * Create a session based authentication guard.
+         *
+         * @param string $name
+         * @param array $config
+         * @return \Illuminate\Auth\SessionGuard
+         * @static
+         */
+        public static function createSessionDriver($name, $config)
+        {
+            /** @var \Illuminate\Auth\AuthManager $instance */
+            return $instance->createSessionDriver($name, $config);
+        }
+
+        /**
+         * Create a token based authentication guard.
+         *
+         * @param string $name
+         * @param array $config
+         * @return \Illuminate\Auth\TokenGuard
+         * @static
+         */
+        public static function createTokenDriver($name, $config)
+        {
+            /** @var \Illuminate\Auth\AuthManager $instance */
+            return $instance->createTokenDriver($name, $config);
+        }
+
+        /**
+         * Get the default authentication driver name.
+         *
+         * @return string
+         * @static
+         */
+        public static function getDefaultDriver()
+        {
+            /** @var \Illuminate\Auth\AuthManager $instance */
+            return $instance->getDefaultDriver();
+        }
+
+        /**
+         * Set the default guard driver the factory should serve.
+         *
+         * @param string $name
+         * @return void
+         * @static
+         */
+        public static function shouldUse($name)
+        {
+            /** @var \Illuminate\Auth\AuthManager $instance */
+            $instance->shouldUse($name);
+        }
+
+        /**
+         * Set the default authentication driver name.
+         *
+         * @param string $name
+         * @return void
+         * @static
+         */
+        public static function setDefaultDriver($name)
+        {
+            /** @var \Illuminate\Auth\AuthManager $instance */
+            $instance->setDefaultDriver($name);
+        }
+
+        /**
+         * Register a new callback based request guard.
+         *
+         * @param string $driver
+         * @param callable $callback
+         * @return \Illuminate\Auth\AuthManager
+         * @static
+         */
+        public static function viaRequest($driver, $callback)
+        {
+            /** @var \Illuminate\Auth\AuthManager $instance */
+            return $instance->viaRequest($driver, $callback);
+        }
+
+        /**
+         * Get the user resolver callback.
+         *
+         * @return \Closure
+         * @static
+         */
+        public static function userResolver()
+        {
+            /** @var \Illuminate\Auth\AuthManager $instance */
+            return $instance->userResolver();
+        }
+
+        /**
+         * Set the callback to be used to resolve users.
+         *
+         * @param \Closure $userResolver
+         * @return \Illuminate\Auth\AuthManager
+         * @static
+         */
+        public static function resolveUsersUsing($userResolver)
+        {
+            /** @var \Illuminate\Auth\AuthManager $instance */
+            return $instance->resolveUsersUsing($userResolver);
+        }
+
+        /**
+         * Register a custom driver creator Closure.
+         *
+         * @param string $driver
+         * @param \Closure $callback
+         * @return \Illuminate\Auth\AuthManager
+         * @static
+         */
+        public static function extend($driver, $callback)
+        {
+            /** @var \Illuminate\Auth\AuthManager $instance */
+            return $instance->extend($driver, $callback);
+        }
+
+        /**
+         * Register a custom provider creator Closure.
+         *
+         * @param string $name
+         * @param \Closure $callback
+         * @return \Illuminate\Auth\AuthManager
+         * @static
+         */
+        public static function provider($name, $callback)
+        {
+            /** @var \Illuminate\Auth\AuthManager $instance */
+            return $instance->provider($name, $callback);
+        }
+
+        /**
+         * Determines if any guards have already been resolved.
+         *
+         * @return bool
+         * @static
+         */
+        public static function hasResolvedGuards()
+        {
+            /** @var \Illuminate\Auth\AuthManager $instance */
+            return $instance->hasResolvedGuards();
+        }
+
+        /**
+         * Forget all of the resolved guard instances.
+         *
+         * @return \Illuminate\Auth\AuthManager
+         * @static
+         */
+        public static function forgetGuards()
+        {
+            /** @var \Illuminate\Auth\AuthManager $instance */
+            return $instance->forgetGuards();
+        }
+
+        /**
+         * Set the application instance used by the manager.
+         *
+         * @param \Illuminate\Contracts\Foundation\Application $app
+         * @return \Illuminate\Auth\AuthManager
+         * @static
+         */
+        public static function setApplication($app)
+        {
+            /** @var \Illuminate\Auth\AuthManager $instance */
+            return $instance->setApplication($app);
+        }
+
+        /**
+         * Create the user provider implementation for the driver.
+         *
+         * @param string|null $provider
+         * @return \Illuminate\Contracts\Auth\UserProvider|null
+         * @throws \InvalidArgumentException
+         * @static
+         */
+        public static function createUserProvider($provider = null)
+        {
+            /** @var \Illuminate\Auth\AuthManager $instance */
+            return $instance->createUserProvider($provider);
+        }
+
+        /**
+         * Get the default user provider name.
+         *
+         * @return string
+         * @static
+         */
+        public static function getDefaultUserProvider()
+        {
+            /** @var \Illuminate\Auth\AuthManager $instance */
+            return $instance->getDefaultUserProvider();
+        }
+
+        /**
+         * Get the currently authenticated user.
+         *
+         * @return \App\Features\User\Models\User|null
+         * @static
+         */
+        public static function user()
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->user();
+        }
+
+        /**
+         * Get the ID for the currently authenticated user.
+         *
+         * @return int|string|null
+         * @static
+         */
+        public static function id()
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->id();
+        }
+
+        /**
+         * Log a user into the application without sessions or cookies.
+         *
+         * @param array $credentials
+         * @return bool
+         * @static
+         */
+        public static function once($credentials = [])
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->once($credentials);
+        }
+
+        /**
+         * Log the given user ID into the application without sessions or cookies.
+         *
+         * @param mixed $id
+         * @return \App\Features\User\Models\User|false
+         * @static
+         */
+        public static function onceUsingId($id)
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->onceUsingId($id);
+        }
+
+        /**
+         * Validate a user's credentials.
+         *
+         * @param array $credentials
+         * @return bool
+         * @static
+         */
+        public static function validate($credentials = [])
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->validate($credentials);
+        }
+
+        /**
+         * Attempt to authenticate using HTTP Basic Auth.
+         *
+         * @param string $field
+         * @param array $extraConditions
+         * @return \Symfony\Component\HttpFoundation\Response|null
+         * @throws \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException
+         * @static
+         */
+        public static function basic($field = 'email', $extraConditions = [])
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->basic($field, $extraConditions);
+        }
+
+        /**
+         * Perform a stateless HTTP Basic login attempt.
+         *
+         * @param string $field
+         * @param array $extraConditions
+         * @return \Symfony\Component\HttpFoundation\Response|null
+         * @throws \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException
+         * @static
+         */
+        public static function onceBasic($field = 'email', $extraConditions = [])
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->onceBasic($field, $extraConditions);
+        }
+
+        /**
+         * Attempt to authenticate a user using the given credentials.
+         *
+         * @param array $credentials
+         * @param bool $remember
+         * @return bool
+         * @static
+         */
+        public static function attempt($credentials = [], $remember = false)
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->attempt($credentials, $remember);
+        }
+
+        /**
+         * Attempt to authenticate a user with credentials and additional callbacks.
+         *
+         * @param array $credentials
+         * @param array|callable|null $callbacks
+         * @param bool $remember
+         * @return bool
+         * @static
+         */
+        public static function attemptWhen($credentials = [], $callbacks = null, $remember = false)
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->attemptWhen($credentials, $callbacks, $remember);
+        }
+
+        /**
+         * Log the given user ID into the application.
+         *
+         * @param mixed $id
+         * @param bool $remember
+         * @return \App\Features\User\Models\User|false
+         * @static
+         */
+        public static function loginUsingId($id, $remember = false)
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->loginUsingId($id, $remember);
+        }
+
+        /**
+         * Log a user into the application.
+         *
+         * @param \Illuminate\Contracts\Auth\Authenticatable $user
+         * @param bool $remember
+         * @return void
+         * @static
+         */
+        public static function login($user, $remember = false)
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            $instance->login($user, $remember);
+        }
+
+        /**
+         * Log the user out of the application.
+         *
+         * @return void
+         * @static
+         */
+        public static function logout()
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            $instance->logout();
+        }
+
+        /**
+         * Log the user out of the application on their current device only.
+         * 
+         * This method does not cycle the "remember" token.
+         *
+         * @return void
+         * @static
+         */
+        public static function logoutCurrentDevice()
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            $instance->logoutCurrentDevice();
+        }
+
+        /**
+         * Invalidate other sessions for the current user.
+         * 
+         * The application must be using the AuthenticateSession middleware.
+         *
+         * @param string $password
+         * @return \App\Features\User\Models\User|null
+         * @throws \Illuminate\Auth\AuthenticationException
+         * @static
+         */
+        public static function logoutOtherDevices($password)
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->logoutOtherDevices($password);
+        }
+
+        /**
+         * Register an authentication attempt event listener.
+         *
+         * @param mixed $callback
+         * @return void
+         * @static
+         */
+        public static function attempting($callback)
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            $instance->attempting($callback);
+        }
+
+        /**
+         * Get the last user we attempted to authenticate.
+         *
+         * @return \App\Features\User\Models\User
+         * @static
+         */
+        public static function getLastAttempted()
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->getLastAttempted();
+        }
+
+        /**
+         * Get a unique identifier for the auth session value.
+         *
+         * @return string
+         * @static
+         */
+        public static function getName()
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->getName();
+        }
+
+        /**
+         * Get the name of the cookie used to store the "recaller".
+         *
+         * @return string
+         * @static
+         */
+        public static function getRecallerName()
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->getRecallerName();
+        }
+
+        /**
+         * Determine if the user was authenticated via "remember me" cookie.
+         *
+         * @return bool
+         * @static
+         */
+        public static function viaRemember()
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->viaRemember();
+        }
+
+        /**
+         * Set the number of minutes the remember me cookie should be valid for.
+         *
+         * @param int $minutes
+         * @return \Illuminate\Auth\SessionGuard
+         * @static
+         */
+        public static function setRememberDuration($minutes)
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->setRememberDuration($minutes);
+        }
+
+        /**
+         * Get the cookie creator instance used by the guard.
+         *
+         * @return \Illuminate\Contracts\Cookie\QueueingFactory
+         * @throws \RuntimeException
+         * @static
+         */
+        public static function getCookieJar()
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->getCookieJar();
+        }
+
+        /**
+         * Set the cookie creator instance used by the guard.
+         *
+         * @param \Illuminate\Contracts\Cookie\QueueingFactory $cookie
+         * @return void
+         * @static
+         */
+        public static function setCookieJar($cookie)
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            $instance->setCookieJar($cookie);
+        }
+
+        /**
+         * Get the event dispatcher instance.
+         *
+         * @return \Illuminate\Contracts\Events\Dispatcher
+         * @static
+         */
+        public static function getDispatcher()
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->getDispatcher();
+        }
+
+        /**
+         * Set the event dispatcher instance.
+         *
+         * @param \Illuminate\Contracts\Events\Dispatcher $events
+         * @return void
+         * @static
+         */
+        public static function setDispatcher($events)
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            $instance->setDispatcher($events);
+        }
+
+        /**
+         * Get the session store used by the guard.
+         *
+         * @return \Illuminate\Contracts\Session\Session
+         * @static
+         */
+        public static function getSession()
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->getSession();
+        }
+
+        /**
+         * Return the currently cached user.
+         *
+         * @return \App\Features\User\Models\User|null
+         * @static
+         */
+        public static function getUser()
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->getUser();
+        }
+
+        /**
+         * Set the current user.
+         *
+         * @param \Illuminate\Contracts\Auth\Authenticatable $user
+         * @return \Illuminate\Auth\SessionGuard
+         * @static
+         */
+        public static function setUser($user)
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->setUser($user);
+        }
+
+        /**
+         * Get the current request instance.
+         *
+         * @return \Symfony\Component\HttpFoundation\Request
+         * @static
+         */
+        public static function getRequest()
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->getRequest();
+        }
+
+        /**
+         * Set the current request instance.
+         *
+         * @param \Symfony\Component\HttpFoundation\Request $request
+         * @return \Illuminate\Auth\SessionGuard
+         * @static
+         */
+        public static function setRequest($request)
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->setRequest($request);
+        }
+
+        /**
+         * Get the timebox instance used by the guard.
+         *
+         * @return \Illuminate\Support\Timebox
+         * @static
+         */
+        public static function getTimebox()
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->getTimebox();
+        }
+
+        /**
+         * Determine if the current user is authenticated. If not, throw an exception.
+         *
+         * @return \App\Features\User\Models\User
+         * @throws \Illuminate\Auth\AuthenticationException
+         * @static
+         */
+        public static function authenticate()
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->authenticate();
+        }
+
+        /**
+         * Determine if the guard has a user instance.
+         *
+         * @return bool
+         * @static
+         */
+        public static function hasUser()
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->hasUser();
+        }
+
+        /**
+         * Determine if the current user is authenticated.
+         *
+         * @return bool
+         * @static
+         */
+        public static function check()
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->check();
+        }
+
+        /**
+         * Determine if the current user is a guest.
+         *
+         * @return bool
+         * @static
+         */
+        public static function guest()
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->guest();
+        }
+
+        /**
+         * Forget the current user.
+         *
+         * @return \Illuminate\Auth\SessionGuard
+         * @static
+         */
+        public static function forgetUser()
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->forgetUser();
+        }
+
+        /**
+         * Get the user provider used by the guard.
+         *
+         * @return \Illuminate\Contracts\Auth\UserProvider
+         * @static
+         */
+        public static function getProvider()
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            return $instance->getProvider();
+        }
+
+        /**
+         * Set the user provider used by the guard.
+         *
+         * @param \Illuminate\Contracts\Auth\UserProvider $provider
+         * @return void
+         * @static
+         */
+        public static function setProvider($provider)
+        {
+            /** @var \Illuminate\Auth\SessionGuard $instance */
+            $instance->setProvider($provider);
+        }
+
+        /**
+         * Register a custom macro.
+         *
+         * @param string $name
+         * @param object|callable $macro
+         * @param-closure-this static  $macro
+         * @return void
+         * @static
+         */
+        public static function macro($name, $macro)
+        {
+            \Illuminate\Auth\SessionGuard::macro($name, $macro);
+        }
+
+        /**
+         * Mix another object into the class.
+         *
+         * @param object $mixin
+         * @param bool $replace
+         * @return void
+         * @throws \ReflectionException
+         * @static
+         */
+        public static function mixin($mixin, $replace = true)
+        {
+            \Illuminate\Auth\SessionGuard::mixin($mixin, $replace);
+        }
+
+        /**
+         * Checks if macro is registered.
+         *
+         * @param string $name
+         * @return bool
+         * @static
+         */
+        public static function hasMacro($name)
+        {
+            return \Illuminate\Auth\SessionGuard::hasMacro($name);
+        }
+
+        /**
+         * Flush the existing macros.
+         *
+         * @return void
+         * @static
+         */
+        public static function flushMacros()
+        {
+            \Illuminate\Auth\SessionGuard::flushMacros();
+        }
+
+            }
+    /**
      * @see \Illuminate\View\Compilers\BladeCompiler
      */
     class Blade {
@@ -4706,20 +5449,6 @@ namespace Illuminate\Support\Facades {
      */
     class Config {
         /**
-         * Write a given configuration value to file.
-         *
-         * @param string $key
-         * @param mixed $value
-         * @return bool
-         * @static
-         */
-        public static function write($key, $value)
-        {
-            /** @var \Devdojo\ConfigWriter\Repository $instance */
-            return $instance->write($key, $value);
-        }
-
-        /**
          * Determine if the given configuration value exists.
          *
          * @param string $key
@@ -4728,8 +5457,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function has($key)
         {
-            //Method inherited from \Illuminate\Config\Repository 
-            /** @var \Devdojo\ConfigWriter\Repository $instance */
+            /** @var \Illuminate\Config\Repository $instance */
             return $instance->has($key);
         }
 
@@ -4743,8 +5471,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function get($key, $default = null)
         {
-            //Method inherited from \Illuminate\Config\Repository 
-            /** @var \Devdojo\ConfigWriter\Repository $instance */
+            /** @var \Illuminate\Config\Repository $instance */
             return $instance->get($key, $default);
         }
 
@@ -4757,8 +5484,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function getMany($keys)
         {
-            //Method inherited from \Illuminate\Config\Repository 
-            /** @var \Devdojo\ConfigWriter\Repository $instance */
+            /** @var \Illuminate\Config\Repository $instance */
             return $instance->getMany($keys);
         }
 
@@ -4773,8 +5499,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function string($key, $default = null)
         {
-            //Method inherited from \Illuminate\Config\Repository 
-            /** @var \Devdojo\ConfigWriter\Repository $instance */
+            /** @var \Illuminate\Config\Repository $instance */
             return $instance->string($key, $default);
         }
 
@@ -4789,8 +5514,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function integer($key, $default = null)
         {
-            //Method inherited from \Illuminate\Config\Repository 
-            /** @var \Devdojo\ConfigWriter\Repository $instance */
+            /** @var \Illuminate\Config\Repository $instance */
             return $instance->integer($key, $default);
         }
 
@@ -4805,8 +5529,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function float($key, $default = null)
         {
-            //Method inherited from \Illuminate\Config\Repository 
-            /** @var \Devdojo\ConfigWriter\Repository $instance */
+            /** @var \Illuminate\Config\Repository $instance */
             return $instance->float($key, $default);
         }
 
@@ -4821,8 +5544,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function boolean($key, $default = null)
         {
-            //Method inherited from \Illuminate\Config\Repository 
-            /** @var \Devdojo\ConfigWriter\Repository $instance */
+            /** @var \Illuminate\Config\Repository $instance */
             return $instance->boolean($key, $default);
         }
 
@@ -4837,8 +5559,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function array($key, $default = null)
         {
-            //Method inherited from \Illuminate\Config\Repository 
-            /** @var \Devdojo\ConfigWriter\Repository $instance */
+            /** @var \Illuminate\Config\Repository $instance */
             return $instance->array($key, $default);
         }
 
@@ -4852,8 +5573,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function collection($key, $default = null)
         {
-            //Method inherited from \Illuminate\Config\Repository 
-            /** @var \Devdojo\ConfigWriter\Repository $instance */
+            /** @var \Illuminate\Config\Repository $instance */
             return $instance->collection($key, $default);
         }
 
@@ -4867,8 +5587,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function set($key, $value = null)
         {
-            //Method inherited from \Illuminate\Config\Repository 
-            /** @var \Devdojo\ConfigWriter\Repository $instance */
+            /** @var \Illuminate\Config\Repository $instance */
             $instance->set($key, $value);
         }
 
@@ -4882,8 +5601,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function prepend($key, $value)
         {
-            //Method inherited from \Illuminate\Config\Repository 
-            /** @var \Devdojo\ConfigWriter\Repository $instance */
+            /** @var \Illuminate\Config\Repository $instance */
             $instance->prepend($key, $value);
         }
 
@@ -4897,8 +5615,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function push($key, $value)
         {
-            //Method inherited from \Illuminate\Config\Repository 
-            /** @var \Devdojo\ConfigWriter\Repository $instance */
+            /** @var \Illuminate\Config\Repository $instance */
             $instance->push($key, $value);
         }
 
@@ -4910,8 +5627,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function all()
         {
-            //Method inherited from \Illuminate\Config\Repository 
-            /** @var \Devdojo\ConfigWriter\Repository $instance */
+            /** @var \Illuminate\Config\Repository $instance */
             return $instance->all();
         }
 
@@ -4924,8 +5640,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function offsetExists($key)
         {
-            //Method inherited from \Illuminate\Config\Repository 
-            /** @var \Devdojo\ConfigWriter\Repository $instance */
+            /** @var \Illuminate\Config\Repository $instance */
             return $instance->offsetExists($key);
         }
 
@@ -4938,8 +5653,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function offsetGet($key)
         {
-            //Method inherited from \Illuminate\Config\Repository 
-            /** @var \Devdojo\ConfigWriter\Repository $instance */
+            /** @var \Illuminate\Config\Repository $instance */
             return $instance->offsetGet($key);
         }
 
@@ -4953,8 +5667,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function offsetSet($key, $value)
         {
-            //Method inherited from \Illuminate\Config\Repository 
-            /** @var \Devdojo\ConfigWriter\Repository $instance */
+            /** @var \Illuminate\Config\Repository $instance */
             $instance->offsetSet($key, $value);
         }
 
@@ -4967,8 +5680,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function offsetUnset($key)
         {
-            //Method inherited from \Illuminate\Config\Repository 
-            /** @var \Devdojo\ConfigWriter\Repository $instance */
+            /** @var \Illuminate\Config\Repository $instance */
             $instance->offsetUnset($key);
         }
 
@@ -4983,8 +5695,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function macro($name, $macro)
         {
-            //Method inherited from \Illuminate\Config\Repository 
-            \Devdojo\ConfigWriter\Repository::macro($name, $macro);
+            \Illuminate\Config\Repository::macro($name, $macro);
         }
 
         /**
@@ -4998,8 +5709,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function mixin($mixin, $replace = true)
         {
-            //Method inherited from \Illuminate\Config\Repository 
-            \Devdojo\ConfigWriter\Repository::mixin($mixin, $replace);
+            \Illuminate\Config\Repository::mixin($mixin, $replace);
         }
 
         /**
@@ -5011,8 +5721,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function hasMacro($name)
         {
-            //Method inherited from \Illuminate\Config\Repository 
-            return \Devdojo\ConfigWriter\Repository::hasMacro($name);
+            return \Illuminate\Config\Repository::hasMacro($name);
         }
 
         /**
@@ -5023,8 +5732,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function flushMacros()
         {
-            //Method inherited from \Illuminate\Config\Repository 
-            \Devdojo\ConfigWriter\Repository::flushMacros();
+            \Illuminate\Config\Repository::flushMacros();
         }
 
             }
@@ -12577,89 +13285,6 @@ namespace Illuminate\Support\Facades {
         }
 
         /**
-         * Release a reserved job back onto the queue after (n) seconds.
-         *
-         * @param string $queue
-         * @param \Illuminate\Queue\Jobs\DatabaseJobRecord $job
-         * @param int $delay
-         * @return mixed
-         * @static
-         */
-        public static function release($queue, $job, $delay)
-        {
-            /** @var \Illuminate\Queue\DatabaseQueue $instance */
-            return $instance->release($queue, $job, $delay);
-        }
-
-        /**
-         * Delete a reserved job from the queue.
-         *
-         * @param string $queue
-         * @param string $id
-         * @return void
-         * @throws \Throwable
-         * @static
-         */
-        public static function deleteReserved($queue, $id)
-        {
-            /** @var \Illuminate\Queue\DatabaseQueue $instance */
-            $instance->deleteReserved($queue, $id);
-        }
-
-        /**
-         * Delete a reserved job from the reserved queue and release it.
-         *
-         * @param string $queue
-         * @param \Illuminate\Queue\Jobs\DatabaseJob $job
-         * @param int $delay
-         * @return void
-         * @static
-         */
-        public static function deleteAndRelease($queue, $job, $delay)
-        {
-            /** @var \Illuminate\Queue\DatabaseQueue $instance */
-            $instance->deleteAndRelease($queue, $job, $delay);
-        }
-
-        /**
-         * Delete all of the jobs from the queue.
-         *
-         * @param string $queue
-         * @return int
-         * @static
-         */
-        public static function clear($queue)
-        {
-            /** @var \Illuminate\Queue\DatabaseQueue $instance */
-            return $instance->clear($queue);
-        }
-
-        /**
-         * Get the queue or return the default.
-         *
-         * @param string|null $queue
-         * @return string
-         * @static
-         */
-        public static function getQueue($queue)
-        {
-            /** @var \Illuminate\Queue\DatabaseQueue $instance */
-            return $instance->getQueue($queue);
-        }
-
-        /**
-         * Get the underlying database instance.
-         *
-         * @return \Illuminate\Database\Connection
-         * @static
-         */
-        public static function getDatabase()
-        {
-            /** @var \Illuminate\Queue\DatabaseQueue $instance */
-            return $instance->getDatabase();
-        }
-
-        /**
          * Get the maximum number of attempts for an object-based queue handler.
          *
          * @param mixed $job
@@ -12669,7 +13294,7 @@ namespace Illuminate\Support\Facades {
         public static function getJobTries($job)
         {
             //Method inherited from \Illuminate\Queue\Queue 
-            /** @var \Illuminate\Queue\DatabaseQueue $instance */
+            /** @var \Illuminate\Queue\SyncQueue $instance */
             return $instance->getJobTries($job);
         }
 
@@ -12683,7 +13308,7 @@ namespace Illuminate\Support\Facades {
         public static function getJobBackoff($job)
         {
             //Method inherited from \Illuminate\Queue\Queue 
-            /** @var \Illuminate\Queue\DatabaseQueue $instance */
+            /** @var \Illuminate\Queue\SyncQueue $instance */
             return $instance->getJobBackoff($job);
         }
 
@@ -12697,7 +13322,7 @@ namespace Illuminate\Support\Facades {
         public static function getJobExpiration($job)
         {
             //Method inherited from \Illuminate\Queue\Queue 
-            /** @var \Illuminate\Queue\DatabaseQueue $instance */
+            /** @var \Illuminate\Queue\SyncQueue $instance */
             return $instance->getJobExpiration($job);
         }
 
@@ -12711,7 +13336,7 @@ namespace Illuminate\Support\Facades {
         public static function createPayloadUsing($callback)
         {
             //Method inherited from \Illuminate\Queue\Queue 
-            \Illuminate\Queue\DatabaseQueue::createPayloadUsing($callback);
+            \Illuminate\Queue\SyncQueue::createPayloadUsing($callback);
         }
 
         /**
@@ -12723,7 +13348,7 @@ namespace Illuminate\Support\Facades {
         public static function getConfig()
         {
             //Method inherited from \Illuminate\Queue\Queue 
-            /** @var \Illuminate\Queue\DatabaseQueue $instance */
+            /** @var \Illuminate\Queue\SyncQueue $instance */
             return $instance->getConfig();
         }
 
@@ -12731,13 +13356,13 @@ namespace Illuminate\Support\Facades {
          * Set the queue configuration array.
          *
          * @param array $config
-         * @return \Illuminate\Queue\DatabaseQueue
+         * @return \Illuminate\Queue\SyncQueue
          * @static
          */
         public static function setConfig($config)
         {
             //Method inherited from \Illuminate\Queue\Queue 
-            /** @var \Illuminate\Queue\DatabaseQueue $instance */
+            /** @var \Illuminate\Queue\SyncQueue $instance */
             return $instance->setConfig($config);
         }
 
@@ -12750,7 +13375,7 @@ namespace Illuminate\Support\Facades {
         public static function getContainer()
         {
             //Method inherited from \Illuminate\Queue\Queue 
-            /** @var \Illuminate\Queue\DatabaseQueue $instance */
+            /** @var \Illuminate\Queue\SyncQueue $instance */
             return $instance->getContainer();
         }
 
@@ -12764,7 +13389,7 @@ namespace Illuminate\Support\Facades {
         public static function setContainer($container)
         {
             //Method inherited from \Illuminate\Queue\Queue 
-            /** @var \Illuminate\Queue\DatabaseQueue $instance */
+            /** @var \Illuminate\Queue\SyncQueue $instance */
             $instance->setContainer($container);
         }
 
@@ -22429,794 +23054,6 @@ namespace Illuminate\Support\Facades {
             }
     }
 
-namespace Devdojo\Auth {
-    /**
-     * @see \Devdojo\Auth\Skeleton\SkeletonClass
-     */
-    class AuthFacade {
-        /**
-         * Attempt to get the guard from the local cache.
-         *
-         * @param string|null $name
-         * @return \Illuminate\Contracts\Auth\Guard|\Illuminate\Contracts\Auth\StatefulGuard
-         * @static
-         */
-        public static function guard($name = null)
-        {
-            /** @var \Illuminate\Auth\AuthManager $instance */
-            return $instance->guard($name);
-        }
-
-        /**
-         * Create a session based authentication guard.
-         *
-         * @param string $name
-         * @param array $config
-         * @return \Illuminate\Auth\SessionGuard
-         * @static
-         */
-        public static function createSessionDriver($name, $config)
-        {
-            /** @var \Illuminate\Auth\AuthManager $instance */
-            return $instance->createSessionDriver($name, $config);
-        }
-
-        /**
-         * Create a token based authentication guard.
-         *
-         * @param string $name
-         * @param array $config
-         * @return \Illuminate\Auth\TokenGuard
-         * @static
-         */
-        public static function createTokenDriver($name, $config)
-        {
-            /** @var \Illuminate\Auth\AuthManager $instance */
-            return $instance->createTokenDriver($name, $config);
-        }
-
-        /**
-         * Get the default authentication driver name.
-         *
-         * @return string
-         * @static
-         */
-        public static function getDefaultDriver()
-        {
-            /** @var \Illuminate\Auth\AuthManager $instance */
-            return $instance->getDefaultDriver();
-        }
-
-        /**
-         * Set the default guard driver the factory should serve.
-         *
-         * @param string $name
-         * @return void
-         * @static
-         */
-        public static function shouldUse($name)
-        {
-            /** @var \Illuminate\Auth\AuthManager $instance */
-            $instance->shouldUse($name);
-        }
-
-        /**
-         * Set the default authentication driver name.
-         *
-         * @param string $name
-         * @return void
-         * @static
-         */
-        public static function setDefaultDriver($name)
-        {
-            /** @var \Illuminate\Auth\AuthManager $instance */
-            $instance->setDefaultDriver($name);
-        }
-
-        /**
-         * Register a new callback based request guard.
-         *
-         * @param string $driver
-         * @param callable $callback
-         * @return \Illuminate\Auth\AuthManager
-         * @static
-         */
-        public static function viaRequest($driver, $callback)
-        {
-            /** @var \Illuminate\Auth\AuthManager $instance */
-            return $instance->viaRequest($driver, $callback);
-        }
-
-        /**
-         * Get the user resolver callback.
-         *
-         * @return \Closure
-         * @static
-         */
-        public static function userResolver()
-        {
-            /** @var \Illuminate\Auth\AuthManager $instance */
-            return $instance->userResolver();
-        }
-
-        /**
-         * Set the callback to be used to resolve users.
-         *
-         * @param \Closure $userResolver
-         * @return \Illuminate\Auth\AuthManager
-         * @static
-         */
-        public static function resolveUsersUsing($userResolver)
-        {
-            /** @var \Illuminate\Auth\AuthManager $instance */
-            return $instance->resolveUsersUsing($userResolver);
-        }
-
-        /**
-         * Register a custom driver creator Closure.
-         *
-         * @param string $driver
-         * @param \Closure $callback
-         * @return \Illuminate\Auth\AuthManager
-         * @static
-         */
-        public static function extend($driver, $callback)
-        {
-            /** @var \Illuminate\Auth\AuthManager $instance */
-            return $instance->extend($driver, $callback);
-        }
-
-        /**
-         * Register a custom provider creator Closure.
-         *
-         * @param string $name
-         * @param \Closure $callback
-         * @return \Illuminate\Auth\AuthManager
-         * @static
-         */
-        public static function provider($name, $callback)
-        {
-            /** @var \Illuminate\Auth\AuthManager $instance */
-            return $instance->provider($name, $callback);
-        }
-
-        /**
-         * Determines if any guards have already been resolved.
-         *
-         * @return bool
-         * @static
-         */
-        public static function hasResolvedGuards()
-        {
-            /** @var \Illuminate\Auth\AuthManager $instance */
-            return $instance->hasResolvedGuards();
-        }
-
-        /**
-         * Forget all of the resolved guard instances.
-         *
-         * @return \Illuminate\Auth\AuthManager
-         * @static
-         */
-        public static function forgetGuards()
-        {
-            /** @var \Illuminate\Auth\AuthManager $instance */
-            return $instance->forgetGuards();
-        }
-
-        /**
-         * Set the application instance used by the manager.
-         *
-         * @param \Illuminate\Contracts\Foundation\Application $app
-         * @return \Illuminate\Auth\AuthManager
-         * @static
-         */
-        public static function setApplication($app)
-        {
-            /** @var \Illuminate\Auth\AuthManager $instance */
-            return $instance->setApplication($app);
-        }
-
-        /**
-         * Create the user provider implementation for the driver.
-         *
-         * @param string|null $provider
-         * @return \Illuminate\Contracts\Auth\UserProvider|null
-         * @throws \InvalidArgumentException
-         * @static
-         */
-        public static function createUserProvider($provider = null)
-        {
-            /** @var \Illuminate\Auth\AuthManager $instance */
-            return $instance->createUserProvider($provider);
-        }
-
-        /**
-         * Get the default user provider name.
-         *
-         * @return string
-         * @static
-         */
-        public static function getDefaultUserProvider()
-        {
-            /** @var \Illuminate\Auth\AuthManager $instance */
-            return $instance->getDefaultUserProvider();
-        }
-
-            }
-    }
-
-namespace Laravel\Socialite\Facades {
-    /**
-     */
-    class Socialite extends \Illuminate\Support\Manager {
-        /**
-         * Get a driver instance.
-         *
-         * @param string $driver
-         * @return mixed
-         * @static
-         */
-        public static function with($driver)
-        {
-            /** @var \Laravel\Socialite\SocialiteManager $instance */
-            return $instance->with($driver);
-        }
-
-        /**
-         * Build an OAuth 2 provider instance.
-         *
-         * @param string $provider
-         * @param array $config
-         * @return \Laravel\Socialite\Two\AbstractProvider
-         * @static
-         */
-        public static function buildProvider($provider, $config)
-        {
-            /** @var \Laravel\Socialite\SocialiteManager $instance */
-            return $instance->buildProvider($provider, $config);
-        }
-
-        /**
-         * Format the server configuration.
-         *
-         * @param array $config
-         * @return array
-         * @static
-         */
-        public static function formatConfig($config)
-        {
-            /** @var \Laravel\Socialite\SocialiteManager $instance */
-            return $instance->formatConfig($config);
-        }
-
-        /**
-         * Forget all of the resolved driver instances.
-         *
-         * @return \Laravel\Socialite\SocialiteManager
-         * @static
-         */
-        public static function forgetDrivers()
-        {
-            /** @var \Laravel\Socialite\SocialiteManager $instance */
-            return $instance->forgetDrivers();
-        }
-
-        /**
-         * Set the container instance used by the manager.
-         *
-         * @param \Illuminate\Contracts\Container\Container $container
-         * @return \Laravel\Socialite\SocialiteManager
-         * @static
-         */
-        public static function setContainer($container)
-        {
-            /** @var \Laravel\Socialite\SocialiteManager $instance */
-            return $instance->setContainer($container);
-        }
-
-        /**
-         * Get the default driver name.
-         *
-         * @return string
-         * @throws \InvalidArgumentException
-         * @static
-         */
-        public static function getDefaultDriver()
-        {
-            /** @var \Laravel\Socialite\SocialiteManager $instance */
-            return $instance->getDefaultDriver();
-        }
-
-        /**
-         * Get a driver instance.
-         *
-         * @param string|null $driver
-         * @return mixed
-         * @throws \InvalidArgumentException
-         * @static
-         */
-        public static function driver($driver = null)
-        {
-            //Method inherited from \Illuminate\Support\Manager 
-            /** @var \Laravel\Socialite\SocialiteManager $instance */
-            return $instance->driver($driver);
-        }
-
-        /**
-         * Register a custom driver creator Closure.
-         *
-         * @param string $driver
-         * @param \Closure $callback
-         * @return \Laravel\Socialite\SocialiteManager
-         * @static
-         */
-        public static function extend($driver, $callback)
-        {
-            //Method inherited from \Illuminate\Support\Manager 
-            /** @var \Laravel\Socialite\SocialiteManager $instance */
-            return $instance->extend($driver, $callback);
-        }
-
-        /**
-         * Get all of the created "drivers".
-         *
-         * @return array
-         * @static
-         */
-        public static function getDrivers()
-        {
-            //Method inherited from \Illuminate\Support\Manager 
-            /** @var \Laravel\Socialite\SocialiteManager $instance */
-            return $instance->getDrivers();
-        }
-
-        /**
-         * Get the container instance used by the manager.
-         *
-         * @return \Illuminate\Contracts\Container\Container
-         * @static
-         */
-        public static function getContainer()
-        {
-            //Method inherited from \Illuminate\Support\Manager 
-            /** @var \Laravel\Socialite\SocialiteManager $instance */
-            return $instance->getContainer();
-        }
-
-            }
-    }
-
-namespace Livewire {
-    /**
-     * @see \Livewire\LivewireManager
-     */
-    class Livewire extends \Livewire\LivewireManager {
-        /**
-         * {@inheritDoc}
-         *
-         * @static
-         */
-        public static function mount($name, $params = [], $key = null, $slots = [])
-        {
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->mount($name, $params, $key, $slots);
-        }
-
-        /**
-         * {@inheritDoc}
-         *
-         * @static
-         */
-        public static function update($snapshot, $diff, $calls)
-        {
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->update($snapshot, $diff, $calls);
-        }
-
-        /**
-         * @static
-         */
-        public static function setProvider($provider)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->setProvider($provider);
-        }
-
-        /**
-         * @static
-         */
-        public static function provide($callback)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->provide($callback);
-        }
-
-        /**
-         * @static
-         */
-        public static function component($name, $class = null)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->component($name, $class);
-        }
-
-        /**
-         * @static
-         */
-        public static function componentHook($hook)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->componentHook($hook);
-        }
-
-        /**
-         * @static
-         */
-        public static function propertySynthesizer($synth)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->propertySynthesizer($synth);
-        }
-
-        /**
-         * @static
-         */
-        public static function directive($name, $callback)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->directive($name, $callback);
-        }
-
-        /**
-         * @static
-         */
-        public static function precompiler($callback)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->precompiler($callback);
-        }
-
-        /**
-         * @static
-         */
-        public static function new($name, $id = null)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->new($name, $id);
-        }
-
-        /**
-         * @static
-         */
-        public static function isDiscoverable($componentNameOrClass)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->isDiscoverable($componentNameOrClass);
-        }
-
-        /**
-         * @static
-         */
-        public static function resolveMissingComponent($resolver)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->resolveMissingComponent($resolver);
-        }
-
-        /**
-         * @static
-         */
-        public static function snapshot($component, $context = null)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->snapshot($component, $context);
-        }
-
-        /**
-         * @static
-         */
-        public static function fromSnapshot($snapshot)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->fromSnapshot($snapshot);
-        }
-
-        /**
-         * @static
-         */
-        public static function listen($eventName, $callback)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->listen($eventName, $callback);
-        }
-
-        /**
-         * @static
-         */
-        public static function current()
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->current();
-        }
-
-        /**
-         * @static
-         */
-        public static function findSynth($keyOrTarget, $component)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->findSynth($keyOrTarget, $component);
-        }
-
-        /**
-         * @static
-         */
-        public static function updateProperty($component, $path, $value)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->updateProperty($component, $path, $value);
-        }
-
-        /**
-         * @static
-         */
-        public static function isLivewireRequest()
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->isLivewireRequest();
-        }
-
-        /**
-         * @static
-         */
-        public static function componentHasBeenRendered()
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->componentHasBeenRendered();
-        }
-
-        /**
-         * @static
-         */
-        public static function forceAssetInjection()
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->forceAssetInjection();
-        }
-
-        /**
-         * @static
-         */
-        public static function setUpdateRoute($callback)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->setUpdateRoute($callback);
-        }
-
-        /**
-         * @static
-         */
-        public static function getUpdateUri()
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->getUpdateUri();
-        }
-
-        /**
-         * @static
-         */
-        public static function setScriptRoute($callback)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->setScriptRoute($callback);
-        }
-
-        /**
-         * @static
-         */
-        public static function useScriptTagAttributes($attributes)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->useScriptTagAttributes($attributes);
-        }
-
-        /**
-         * @static
-         */
-        public static function withUrlParams($params)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->withUrlParams($params);
-        }
-
-        /**
-         * @static
-         */
-        public static function withQueryParams($params)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->withQueryParams($params);
-        }
-
-        /**
-         * @static
-         */
-        public static function withCookie($name, $value)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->withCookie($name, $value);
-        }
-
-        /**
-         * @static
-         */
-        public static function withCookies($cookies)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->withCookies($cookies);
-        }
-
-        /**
-         * @static
-         */
-        public static function withHeaders($headers)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->withHeaders($headers);
-        }
-
-        /**
-         * @static
-         */
-        public static function withoutLazyLoading()
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->withoutLazyLoading();
-        }
-
-        /**
-         * @static
-         */
-        public static function test($name, $params = [])
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->test($name, $params);
-        }
-
-        /**
-         * @static
-         */
-        public static function visit($name)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->visit($name);
-        }
-
-        /**
-         * @static
-         */
-        public static function actingAs($user, $driver = null)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->actingAs($user, $driver);
-        }
-
-        /**
-         * @static
-         */
-        public static function isRunningServerless()
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->isRunningServerless();
-        }
-
-        /**
-         * @static
-         */
-        public static function addPersistentMiddleware($middleware)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->addPersistentMiddleware($middleware);
-        }
-
-        /**
-         * @static
-         */
-        public static function setPersistentMiddleware($middleware)
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->setPersistentMiddleware($middleware);
-        }
-
-        /**
-         * @static
-         */
-        public static function getPersistentMiddleware()
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->getPersistentMiddleware();
-        }
-
-        /**
-         * @static
-         */
-        public static function flushState()
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->flushState();
-        }
-
-        /**
-         * @static
-         */
-        public static function originalUrl()
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->originalUrl();
-        }
-
-        /**
-         * @static
-         */
-        public static function originalPath()
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->originalPath();
-        }
-
-        /**
-         * @static
-         */
-        public static function originalMethod()
-        {
-            //Method inherited from \Livewire\LivewireManager 
-            /** @var \Livewire\Volt\LivewireManager $instance */
-            return $instance->originalMethod();
-        }
-
-            }
-    }
-
 namespace Illuminate\Support {
     /**
      * @template TKey of array-key
@@ -23353,136 +23190,6 @@ namespace Illuminate\Testing {
             return \Illuminate\Testing\TestResponse::ds();
         }
 
-        /**
-         * @see \Livewire\Volt\VoltServiceProvider::registerTestingMacros()
-         * @param mixed $component
-         * @static
-         */
-        public static function assertSeeVolt($component)
-        {
-            return \Illuminate\Testing\TestResponse::assertSeeVolt($component);
-        }
-
-        /**
-         * @see \Livewire\Volt\VoltServiceProvider::registerTestingMacros()
-         * @param mixed $component
-         * @static
-         */
-        public static function assertDontSeeVolt($component)
-        {
-            return \Illuminate\Testing\TestResponse::assertDontSeeVolt($component);
-        }
-
-            }
-    }
-
-namespace Illuminate\Routing {
-    /**
-     */
-    class Route {
-        /**
-         * @see \Livewire\Features\SupportLazyLoading\SupportLazyLoading::registerRouteMacro()
-         * @param mixed $enabled
-         * @static
-         */
-        public static function lazy($enabled = true)
-        {
-            return \Illuminate\Routing\Route::lazy($enabled);
-        }
-
-            }
-    }
-
-namespace Illuminate\View {
-    /**
-     */
-    class ComponentAttributeBag {
-        /**
-         * @see \Livewire\Features\SupportBladeAttributes\SupportBladeAttributes::provide()
-         * @param mixed $name
-         * @static
-         */
-        public static function wire($name)
-        {
-            return \Illuminate\View\ComponentAttributeBag::wire($name);
-        }
-
-            }
-    /**
-     */
-    class View {
-        /**
-         * @see \Livewire\Features\SupportPageComponents\SupportPageComponents::registerLayoutViewMacros()
-         * @param mixed $data
-         * @static
-         */
-        public static function layoutData($data = [])
-        {
-            return \Illuminate\View\View::layoutData($data);
-        }
-
-        /**
-         * @see \Livewire\Features\SupportPageComponents\SupportPageComponents::registerLayoutViewMacros()
-         * @param mixed $section
-         * @static
-         */
-        public static function section($section)
-        {
-            return \Illuminate\View\View::section($section);
-        }
-
-        /**
-         * @see \Livewire\Features\SupportPageComponents\SupportPageComponents::registerLayoutViewMacros()
-         * @param mixed $title
-         * @static
-         */
-        public static function title($title)
-        {
-            return \Illuminate\View\View::title($title);
-        }
-
-        /**
-         * @see \Livewire\Features\SupportPageComponents\SupportPageComponents::registerLayoutViewMacros()
-         * @param mixed $slot
-         * @static
-         */
-        public static function slot($slot)
-        {
-            return \Illuminate\View\View::slot($slot);
-        }
-
-        /**
-         * @see \Livewire\Features\SupportPageComponents\SupportPageComponents::registerLayoutViewMacros()
-         * @param mixed $view
-         * @param mixed $params
-         * @static
-         */
-        public static function extends($view, $params = [])
-        {
-            return \Illuminate\View\View::extends($view, $params);
-        }
-
-        /**
-         * @see \Livewire\Features\SupportPageComponents\SupportPageComponents::registerLayoutViewMacros()
-         * @param mixed $view
-         * @param mixed $params
-         * @static
-         */
-        public static function layout($view, $params = [])
-        {
-            return \Illuminate\View\View::layout($view, $params);
-        }
-
-        /**
-         * @see \Livewire\Features\SupportPageComponents\SupportPageComponents::registerLayoutViewMacros()
-         * @param callable $callback
-         * @static
-         */
-        public static function response($callback)
-        {
-            return \Illuminate\View\View::response($callback);
-        }
-
             }
     }
 
@@ -23491,7 +23198,7 @@ namespace  {
     class App extends \Illuminate\Support\Facades\App {}
     class Arr extends \Illuminate\Support\Arr {}
     class Artisan extends \Illuminate\Support\Facades\Artisan {}
-    class Auth extends \Devdojo\Auth\AuthFacade {}
+    class Auth extends \Illuminate\Support\Facades\Auth {}
     class Benchmark extends \Illuminate\Support\Benchmark {}
     class Blade extends \Illuminate\Support\Facades\Blade {}
     class Broadcast extends \Illuminate\Support\Facades\Broadcast {}
@@ -28369,8 +28076,6 @@ namespace  {
     class Validator extends \Illuminate\Support\Facades\Validator {}
     class View extends \Illuminate\Support\Facades\View {}
     class Vite extends \Illuminate\Support\Facades\Vite {}
-    class Socialite extends \Laravel\Socialite\Facades\Socialite {}
-    class Livewire extends \Livewire\Livewire {}
 }
 
 
