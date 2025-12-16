@@ -31,6 +31,10 @@ class LoginAction
             ]);
         }
 
+        if (! app()->isProduction() && ! $user->hasVerifiedEmail()) {
+            $user->markEmailAsVerified();
+        }
+
         return $user->createToken(Str::random())->plainTextToken;
     }
 }
