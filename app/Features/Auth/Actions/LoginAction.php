@@ -23,6 +23,14 @@ class LoginAction
             ]);
         }
 
+        if (app()->isProduction() && ! $user->hasVerifiedEmail()) {
+            $user->sendEmailVerificationNotification();
+
+            throw ValidationException::withMessages([
+                'email' => ['You need to verify your email address. The verification link has been sent.'],
+            ]);
+        }
+
         return $user->createToken(Str::random())->plainTextToken;
     }
 }
