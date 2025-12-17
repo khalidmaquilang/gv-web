@@ -19,7 +19,17 @@ class MusicForm
                 TextInput::make('artist')
                     ->required(),
                 FileUpload::make('path')
-                    ->required(),
+                    ->label('Audio File')
+                    ->directory('musics')
+                    ->acceptedFileTypes([
+                        'audio/mpeg',
+                        'audio/wav',
+                        'audio/ogg',
+                        'audio/x-m4a',
+                        'audio/aac',
+                    ])
+                    ->required()
+                    ->columnSpanFull(),
             ]);
     }
 }
