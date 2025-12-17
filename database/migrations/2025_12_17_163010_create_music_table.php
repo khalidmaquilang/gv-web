@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('artist');
             $table->string('path');
+            $table->boolean('active')->default(true);
             $table->unsignedInteger('duration')->nullable()->index()->comment('in seconds');
             $table->enum('status', MusicStatusEnum::toArray())->default(MusicStatusEnum::Processing);
             $table->timestamps();
