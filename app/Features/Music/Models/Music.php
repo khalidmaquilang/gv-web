@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Features\Music\Models;
 
+use App\Features\Music\Enums\MusicStatusEnum;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $artist
  * @property string $path
  * @property int|null $duration
- * @property string $status
+ * @property MusicStatusEnum $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  *
@@ -34,4 +35,8 @@ use Illuminate\Database\Eloquent\Model;
 class Music extends Model
 {
     use HasUuids;
+
+    protected $casts = [
+        'status' => MusicStatusEnum::class,
+    ];
 }

@@ -19766,7 +19766,7 @@ namespace Illuminate\Support\Facades {
          * Get a filesystem instance.
          *
          * @param string|null $name
-         * @return \Illuminate\Filesystem\LocalFilesystemAdapter
+         * @return \Illuminate\Filesystem\FilesystemAdapter
          * @static
          */
         public static function drive($name = null)
@@ -19779,7 +19779,7 @@ namespace Illuminate\Support\Facades {
          * Get a filesystem instance.
          *
          * @param \UnitEnum|string|null $name
-         * @return \Illuminate\Filesystem\LocalFilesystemAdapter
+         * @return \Illuminate\Filesystem\FilesystemAdapter
          * @static
          */
         public static function disk($name = null)
@@ -19804,7 +19804,7 @@ namespace Illuminate\Support\Facades {
          * Build an on-demand disk.
          *
          * @param string|array $config
-         * @return \Illuminate\Filesystem\LocalFilesystemAdapter
+         * @return \Illuminate\Filesystem\FilesystemAdapter
          * @static
          */
         public static function build($config)
@@ -19818,7 +19818,7 @@ namespace Illuminate\Support\Facades {
          *
          * @param array $config
          * @param string $name
-         * @return \Illuminate\Filesystem\LocalFilesystemAdapter
+         * @return \Illuminate\Filesystem\FilesystemAdapter
          * @static
          */
         public static function createLocalDriver($config, $name = 'local')
@@ -19831,7 +19831,7 @@ namespace Illuminate\Support\Facades {
          * Create an instance of the ftp driver.
          *
          * @param array $config
-         * @return \Illuminate\Filesystem\LocalFilesystemAdapter
+         * @return \Illuminate\Filesystem\FilesystemAdapter
          * @static
          */
         public static function createFtpDriver($config)
@@ -19844,7 +19844,7 @@ namespace Illuminate\Support\Facades {
          * Create an instance of the sftp driver.
          *
          * @param array $config
-         * @return \Illuminate\Filesystem\LocalFilesystemAdapter
+         * @return \Illuminate\Filesystem\FilesystemAdapter
          * @static
          */
         public static function createSftpDriver($config)
@@ -19870,7 +19870,7 @@ namespace Illuminate\Support\Facades {
          * Create a scoped driver.
          *
          * @param array $config
-         * @return \Illuminate\Filesystem\LocalFilesystemAdapter
+         * @return \Illuminate\Filesystem\FilesystemAdapter
          * @static
          */
         public static function createScopedDriver($config)
@@ -19971,71 +19971,16 @@ namespace Illuminate\Support\Facades {
         }
 
         /**
-         * Determine if temporary URLs can be generated.
-         *
-         * @return bool
-         * @static
-         */
-        public static function providesTemporaryUrls()
-        {
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
-            return $instance->providesTemporaryUrls();
-        }
-
-        /**
-         * Get a temporary URL for the file at the given path.
-         *
-         * @param string $path
-         * @param \DateTimeInterface $expiration
-         * @param array $options
-         * @return string
-         * @static
-         */
-        public static function temporaryUrl($path, $expiration, $options = [])
-        {
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
-            return $instance->temporaryUrl($path, $expiration, $options);
-        }
-
-        /**
-         * Specify the name of the disk the adapter is managing.
-         *
-         * @param string $disk
-         * @return \Illuminate\Filesystem\LocalFilesystemAdapter
-         * @static
-         */
-        public static function diskName($disk)
-        {
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
-            return $instance->diskName($disk);
-        }
-
-        /**
-         * Indicate that signed URLs should serve the corresponding files.
-         *
-         * @param bool $serve
-         * @param \Closure|null $urlGeneratorResolver
-         * @return \Illuminate\Filesystem\LocalFilesystemAdapter
-         * @static
-         */
-        public static function shouldServeSignedUrls($serve = true, $urlGeneratorResolver = null)
-        {
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
-            return $instance->shouldServeSignedUrls($serve, $urlGeneratorResolver);
-        }
-
-        /**
          * Assert that the given file or directory exists.
          *
          * @param string|array $path
          * @param string|null $content
-         * @return \Illuminate\Filesystem\LocalFilesystemAdapter
+         * @return \Illuminate\Filesystem\FilesystemAdapter
          * @static
          */
         public static function assertExists($path, $content = null)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->assertExists($path, $content);
         }
 
@@ -20045,13 +19990,12 @@ namespace Illuminate\Support\Facades {
          * @param string $path
          * @param int $count
          * @param bool $recursive
-         * @return \Illuminate\Filesystem\LocalFilesystemAdapter
+         * @return \Illuminate\Filesystem\FilesystemAdapter
          * @static
          */
         public static function assertCount($path, $count, $recursive = false)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->assertCount($path, $count, $recursive);
         }
 
@@ -20059,13 +20003,12 @@ namespace Illuminate\Support\Facades {
          * Assert that the given file or directory does not exist.
          *
          * @param string|array $path
-         * @return \Illuminate\Filesystem\LocalFilesystemAdapter
+         * @return \Illuminate\Filesystem\FilesystemAdapter
          * @static
          */
         public static function assertMissing($path)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->assertMissing($path);
         }
 
@@ -20073,13 +20016,12 @@ namespace Illuminate\Support\Facades {
          * Assert that the given directory is empty.
          *
          * @param string $path
-         * @return \Illuminate\Filesystem\LocalFilesystemAdapter
+         * @return \Illuminate\Filesystem\FilesystemAdapter
          * @static
          */
         public static function assertDirectoryEmpty($path)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->assertDirectoryEmpty($path);
         }
 
@@ -20092,8 +20034,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function exists($path)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->exists($path);
         }
 
@@ -20106,8 +20047,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function missing($path)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->missing($path);
         }
 
@@ -20120,8 +20060,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function fileExists($path)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->fileExists($path);
         }
 
@@ -20134,8 +20073,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function fileMissing($path)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->fileMissing($path);
         }
 
@@ -20148,8 +20086,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function directoryExists($path)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->directoryExists($path);
         }
 
@@ -20162,8 +20099,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function directoryMissing($path)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->directoryMissing($path);
         }
 
@@ -20176,8 +20112,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function path($path)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->path($path);
         }
 
@@ -20190,8 +20125,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function get($path)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->get($path);
         }
 
@@ -20205,8 +20139,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function json($path, $flags = 0)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->json($path, $flags);
         }
 
@@ -20222,8 +20155,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function response($path, $name = null, $headers = [], $disposition = 'inline')
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->response($path, $name, $headers, $disposition);
         }
 
@@ -20239,8 +20171,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function serve($request, $path, $name = null, $headers = [])
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->serve($request, $path, $name, $headers);
         }
 
@@ -20255,8 +20186,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function download($path, $name = null, $headers = [])
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->download($path, $name, $headers);
         }
 
@@ -20271,8 +20201,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function put($path, $contents, $options = [])
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->put($path, $contents, $options);
         }
 
@@ -20287,8 +20216,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function putFile($path, $file = null, $options = [])
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->putFile($path, $file, $options);
         }
 
@@ -20304,8 +20232,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function putFileAs($path, $file, $name = null, $options = [])
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->putFileAs($path, $file, $name, $options);
         }
 
@@ -20318,8 +20245,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function getVisibility($path)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->getVisibility($path);
         }
 
@@ -20333,8 +20259,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function setVisibility($path, $visibility)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->setVisibility($path, $visibility);
         }
 
@@ -20350,8 +20275,7 @@ namespace Illuminate\Support\Facades {
         public static function prepend($path, $data, $separator = '
 ')
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->prepend($path, $data, $separator);
         }
 
@@ -20367,8 +20291,7 @@ namespace Illuminate\Support\Facades {
         public static function append($path, $data, $separator = '
 ')
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->append($path, $data, $separator);
         }
 
@@ -20381,8 +20304,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function delete($paths)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->delete($paths);
         }
 
@@ -20396,8 +20318,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function copy($from, $to)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->copy($from, $to);
         }
 
@@ -20411,8 +20332,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function move($from, $to)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->move($from, $to);
         }
 
@@ -20425,8 +20345,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function size($path)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->size($path);
         }
 
@@ -20439,8 +20358,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function checksum($path, $options = [])
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->checksum($path, $options);
         }
 
@@ -20453,8 +20371,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function mimeType($path)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->mimeType($path);
         }
 
@@ -20467,8 +20384,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function lastModified($path)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->lastModified($path);
         }
 
@@ -20481,8 +20397,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function readStream($path)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->readStream($path);
         }
 
@@ -20497,8 +20412,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function writeStream($path, $resource, $options = [])
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->writeStream($path, $resource, $options);
         }
 
@@ -20512,9 +20426,36 @@ namespace Illuminate\Support\Facades {
          */
         public static function url($path)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->url($path);
+        }
+
+        /**
+         * Determine if temporary URLs can be generated.
+         *
+         * @return bool
+         * @static
+         */
+        public static function providesTemporaryUrls()
+        {
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
+            return $instance->providesTemporaryUrls();
+        }
+
+        /**
+         * Get a temporary URL for the file at the given path.
+         *
+         * @param string $path
+         * @param \DateTimeInterface $expiration
+         * @param array $options
+         * @return string
+         * @throws \RuntimeException
+         * @static
+         */
+        public static function temporaryUrl($path, $expiration, $options = [])
+        {
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
+            return $instance->temporaryUrl($path, $expiration, $options);
         }
 
         /**
@@ -20529,8 +20470,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function temporaryUploadUrl($path, $expiration, $options = [])
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->temporaryUploadUrl($path, $expiration, $options);
         }
 
@@ -20544,8 +20484,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function files($directory = null, $recursive = false)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->files($directory, $recursive);
         }
 
@@ -20558,8 +20497,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function allFiles($directory = null)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->allFiles($directory);
         }
 
@@ -20573,8 +20511,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function directories($directory = null, $recursive = false)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->directories($directory, $recursive);
         }
 
@@ -20587,8 +20524,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function allDirectories($directory = null)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->allDirectories($directory);
         }
 
@@ -20601,8 +20537,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function makeDirectory($path)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->makeDirectory($path);
         }
 
@@ -20615,8 +20550,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function deleteDirectory($directory)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->deleteDirectory($directory);
         }
 
@@ -20628,8 +20562,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function getDriver()
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->getDriver();
         }
 
@@ -20641,8 +20574,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function getAdapter()
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->getAdapter();
         }
 
@@ -20654,8 +20586,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function getConfig()
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->getConfig();
         }
 
@@ -20668,8 +20599,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function serveUsing($callback)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             $instance->serveUsing($callback);
         }
 
@@ -20682,8 +20612,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function buildTemporaryUrlsUsing($callback)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             $instance->buildTemporaryUrlsUsing($callback);
         }
 
@@ -20700,7 +20629,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function when($value = null, $callback = null, $default = null)
         {
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->when($value, $callback, $default);
         }
 
@@ -20717,7 +20646,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function unless($value = null, $callback = null, $default = null)
         {
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->unless($value, $callback, $default);
         }
 
@@ -20732,8 +20661,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function macro($name, $macro)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            \Illuminate\Filesystem\LocalFilesystemAdapter::macro($name, $macro);
+            \Illuminate\Filesystem\FilesystemAdapter::macro($name, $macro);
         }
 
         /**
@@ -20747,8 +20675,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function mixin($mixin, $replace = true)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            \Illuminate\Filesystem\LocalFilesystemAdapter::mixin($mixin, $replace);
+            \Illuminate\Filesystem\FilesystemAdapter::mixin($mixin, $replace);
         }
 
         /**
@@ -20760,8 +20687,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function hasMacro($name)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            return \Illuminate\Filesystem\LocalFilesystemAdapter::hasMacro($name);
+            return \Illuminate\Filesystem\FilesystemAdapter::hasMacro($name);
         }
 
         /**
@@ -20772,8 +20698,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function flushMacros()
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            \Illuminate\Filesystem\LocalFilesystemAdapter::flushMacros();
+            \Illuminate\Filesystem\FilesystemAdapter::flushMacros();
         }
 
         /**
@@ -20787,8 +20712,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function macroCall($method, $parameters)
         {
-            //Method inherited from \Illuminate\Filesystem\FilesystemAdapter 
-            /** @var \Illuminate\Filesystem\LocalFilesystemAdapter $instance */
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
             return $instance->macroCall($method, $parameters);
         }
 
@@ -23086,6 +23010,14 @@ namespace AnourValar\EloquentSerialize\Facades {
             return $instance->unserialize($package);
         }
 
+            }
+    }
+
+namespace Hugomyb\FilamentMediaAction\Facades {
+    /**
+     * @see \Hugomyb\FilamentMediaAction\FilamentMediaAction
+     */
+    class FilamentMediaAction {
             }
     }
 
@@ -31981,10 +31913,16 @@ namespace  {
     class View extends \Illuminate\Support\Facades\View {}
     class Vite extends \Illuminate\Support\Facades\Vite {}
     class EloquentSerialize extends \AnourValar\EloquentSerialize\Facades\EloquentSerializeFacade {}
+    class FilamentMediaAction extends \Hugomyb\FilamentMediaAction\Facades\FilamentMediaAction {}
     class Livewire extends \Livewire\Livewire {}
 }
 
 
+namespace Facades\Livewire\Features\SupportFileUploads {
+    /**
+     * @mixin \Livewire\Features\SupportFileUploads\GenerateSignedUploadUrl     */
+    class GenerateSignedUploadUrl extends \Livewire\Features\SupportFileUploads\GenerateSignedUploadUrl {}
+}
 
 
 

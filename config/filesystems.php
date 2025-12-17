@@ -60,6 +60,14 @@ return [
             'report' => false,
         ],
 
+        'bunny' => [
+            'driver' => 'bunny',
+            'storage_zone' => env('BUNNY_STORAGE_ZONE'),
+            'api_key' => env('BUNNY_API_KEY'),
+            'region' => env('BUNNY_REGION', \PlatformCommunity\Flysystem\BunnyCDN\BunnyCDNRegion::DEFAULT),
+            'pull_zone' => env('BUNNY_PULL_ZONE', ''), // optional if you want to access the file publicly
+            'root' => '', // optional, you could set a specific folder for upload like '/uploads'
+        ],
     ],
 
     /*

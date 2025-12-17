@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "793fad688b1215732c265485e0e3b430",
+    "content-hash": "95fb2d10abda0a398638c32aa18b0341",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -71,6 +71,60 @@
                 "source": "https://github.com/AnourValar/eloquent-serialize/tree/1.3.5"
             },
             "time": "2025-12-04T13:38:21+00:00"
+        },
+        {
+            "name": "bangnokia/laravel-bunny-storage",
+            "version": "v2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bangnokia/laravel-bunny-storage.git",
+                "reference": "5f4cefb78d408fa190053abefaa747d3d801f02c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bangnokia/laravel-bunny-storage/zipball/5f4cefb78d408fa190053abefaa747d3d801f02c",
+                "reference": "5f4cefb78d408fa190053abefaa747d3d801f02c",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/filesystem": "^10.46|^11|^12",
+                "illuminate/support": "^10.46|^11|^12",
+                "league/flysystem-path-prefixing": "^3.3",
+                "platformcommunity/flysystem-bunnycdn": "^3.3"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^8.0|^9.0|^10.0",
+                "phpunit/phpunit": "^10.0|^11.0|^12.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Bangnokia\\LaravelBunnyStorage\\BunnyStorageServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Bangnokia\\LaravelBunnyStorage\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "bangnokia",
+                    "email": "bangnokia@gmail.com"
+                }
+            ],
+            "description": "Use Bunny Storage in Laravel application",
+            "support": {
+                "issues": "https://github.com/bangnokia/laravel-bunny-storage/issues",
+                "source": "https://github.com/bangnokia/laravel-bunny-storage/tree/v2.0.3"
+            },
+            "time": "2025-04-09T08:51:54+00:00"
         },
         {
             "name": "blade-ui-kit/blade-heroicons",
@@ -2137,6 +2191,79 @@
             "time": "2025-08-22T14:27:06+00:00"
         },
         {
+            "name": "hugomyb/filament-media-action",
+            "version": "v4.1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hugomyb/filament-media-action.git",
+                "reference": "d722c890d82c319c9091de04f39d84891f1056b2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hugomyb/filament-media-action/zipball/d722c890d82c319c9091de04f39d84891f1056b2",
+                "reference": "d722c890d82c319c9091de04f39d84891f1056b2",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^4.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.92.4"
+            },
+            "require-dev": {
+                "nunomaduro/collision": "^8.0",
+                "orchestra/testbench": "^10.0",
+                "pestphp/pest": "^3.0",
+                "pestphp/pest-plugin-arch": "^3.0",
+                "pestphp/pest-plugin-laravel": "^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "FilamentMediaAction": "Hugomyb\\FilamentMediaAction\\Facades\\FilamentMediaAction"
+                    },
+                    "providers": [
+                        "Hugomyb\\FilamentMediaAction\\FilamentMediaActionServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Hugomyb\\FilamentMediaAction\\": "src/",
+                    "Hugomyb\\FilamentMediaAction\\Database\\Factories\\": "database/factories/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mayonobe Hugo",
+                    "email": "hugomayonobe@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Automatically display your media (video, audio, document, image, ...) with an action",
+            "homepage": "https://github.com/hugomyb/filament-media-action",
+            "keywords": [
+                "filament-media-action",
+                "hugomyb",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/hugomyb/filament-media-action/issues",
+                "source": "https://github.com/hugomyb/filament-media-action"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/hugomyb",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-11-17T21:05:09+00:00"
+        },
+        {
             "name": "kirschbaum-development/eloquent-power-joins",
             "version": "4.2.11",
             "source": {
@@ -3081,6 +3208,52 @@
                 "source": "https://github.com/thephpleague/flysystem-local/tree/3.30.2"
             },
             "time": "2025-11-10T11:23:37+00:00"
+        },
+        {
+            "name": "league/flysystem-path-prefixing",
+            "version": "3.28.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/flysystem-path-prefixing.git",
+                "reference": "fe187456d824b288672b89d1b32b2d78975bb934"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/flysystem-path-prefixing/zipball/fe187456d824b288672b89d1b32b2d78975bb934",
+                "reference": "fe187456d824b288672b89d1b32b2d78975bb934",
+                "shasum": ""
+            },
+            "require": {
+                "league/flysystem": "^3.10.0",
+                "php": "^8.0.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "League\\Flysystem\\PathPrefixing\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Frank de Jonge",
+                    "email": "info@frankdejonge.nl"
+                }
+            ],
+            "description": "Path prefixing filesystem adapter for Flysystem.",
+            "keywords": [
+                "Flysystem",
+                "filesystem",
+                "prefix",
+                "prefixing"
+            ],
+            "support": {
+                "source": "https://github.com/thephpleague/flysystem-path-prefixing/tree/3.28.0"
+            },
+            "time": "2024-05-06T20:05:52+00:00"
         },
         {
             "name": "league/mime-type-detection",
@@ -4657,6 +4830,63 @@
                 "source": "https://github.com/phpstan/phpdoc-parser/tree/2.3.0"
             },
             "time": "2025-08-30T15:50:23+00:00"
+        },
+        {
+            "name": "platformcommunity/flysystem-bunnycdn",
+            "version": "v3.3.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PlatformCommunity/flysystem-bunnycdn.git",
+                "reference": "5ebe968b871f04cb03b657d1bdc988384515dc13"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PlatformCommunity/flysystem-bunnycdn/zipball/5ebe968b871f04cb03b657d1bdc988384515dc13",
+                "reference": "5ebe968b871f04cb03b657d1bdc988384515dc13",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^7.4",
+                "league/flysystem": "^3.16",
+                "league/mime-type-detection": "^1.11"
+            },
+            "require-dev": {
+                "fzaninotto/faker": "^1.5",
+                "laravel/pint": "^0.2.3",
+                "league/flysystem-adapter-test-utilities": "^3",
+                "league/flysystem-memory": "^3.0",
+                "league/flysystem-path-prefixing": "^3.3",
+                "phpunit/phpunit": "@stable"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PlatformCommunity\\Flysystem\\BunnyCDN\\": "src/",
+                    "PlatformCommunity\\Flysystem\\BunnyCDN\\Tests\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alex",
+                    "email": "alex@platformapp.io"
+                }
+            ],
+            "description": "Flysystem adapter for BunnyCDN",
+            "support": {
+                "issues": "https://github.com/PlatformCommunity/flysystem-bunnycdn/issues",
+                "source": "https://github.com/PlatformCommunity/flysystem-bunnycdn/tree/v3.3.5"
+            },
+            "time": "2024-10-29T03:40:14+00:00"
         },
         {
             "name": "pragmarx/google2fa",

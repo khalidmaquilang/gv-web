@@ -22,8 +22,14 @@ class MusicForm
                     ->label('Audio File')
                     ->directory('musics')
                     ->acceptedFileTypes([
+                        // MP3
                         'audio/mpeg',
+                        'audio/mp3',
+                        // WAV (The culprit is usually one of these three)
                         'audio/wav',
+                        'audio/x-wav',
+                        'audio/vnd.wav',
+                        // Others
                         'audio/ogg',
                         'audio/x-m4a',
                         'audio/aac',
