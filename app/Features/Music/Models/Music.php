@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Features\Music\Models;
 
 use App\Features\Music\Enums\MusicStatusEnum;
+use App\Features\Webhook\Enums\WebhookEnum;
+use App\Features\Webhook\Models\Interfaces\FfmpegInterface;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
@@ -32,11 +34,25 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin \Eloquent
  */
-class Music extends Model
+class Music extends Model implements FfmpegInterface
 {
     use HasUuids;
 
     protected $casts = [
         'status' => MusicStatusEnum::class,
     ];
+
+    public static function updateMediaStatus(string $model_id, WebhookEnum $status, int $duration, string $path): void
+    {
+        $music = static::find($model_id);
+        if ($music === null) {
+            return;
+        }
+
+        $music->update([
+            'status' => $status->toMusic(),
+            'duration' => $duration,
+            'path' => blank($path) ? $music->path : $path,
+        ]);
+    }
 }

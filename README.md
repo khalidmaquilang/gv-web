@@ -1,59 +1,122 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Setup AWS Lambda Serverless for audio and video processing
+```php
+import { spawnSync } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
+import crypto from 'node:crypto';
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+// Configuration - Ensure these are set in Lambda Environment Variables
+const BUNNY_STORAGE_ZONE = "gv-dev";
+const BUNNY_ACCESS_KEY = "bunny password";
+const BUNNY_REGION = 'sg';
 
-## About Laravel
+export const handler = async (event) => {
+    // 0. Extract variables from the event
+    const { modelId, filename, modelType, isVideo } = event;
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+    if (!modelId || !filename || isVideo == null || !modelType) {
+        return { status: 'error', message: 'Missing modelId or filename or isVideo or modelType in event' };
+    }
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+    const localInputName = path.basename(filename);
+    const inputPath = `/tmp/${localInputName}`;
+    const outputFileName = `processed_${path.parse(filename).name}.mp4`;
+    const outputPath = `/tmp/${outputFileName}`;
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+    const ffmpegPath = '/opt/bin/ffmpeg';
+    const ffprobePath = '/opt/bin/ffprobe';
 
-## Learning Laravel
+    const webhook_url = 'https://ec4f11df9299.ngrok-free.app/api/v1/webhook/ffmpeg/b714fc8b-9ccb-4de7-9e42-3b8e57670ad6';
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+    try {
+        // 1. Download
+        console.log(`Downloading ${filename}...`);
+        const downloadRes = await fetch(`https://${BUNNY_STORAGE_ZONE}.b-cdn.net/${filename}`, {
+            headers: { 'AccessKey': BUNNY_ACCESS_KEY }
+        });
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+        if (!downloadRes.ok) throw new Error(`Download failed: ${downloadRes.status}`);
+        fs.writeFileSync(inputPath, Buffer.from(await downloadRes.arrayBuffer()));
 
-## Laravel Sponsors
+        // 2. Identify Media Type
+        console.log(`Processing ${isVideo ? 'Video' : 'Audio'}: ${filename}`);
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+        // 3. Construct FFmpeg Args
+        let args = ['-i', inputPath];
+        if (! isVideo) {
+            args.push('-c:a', 'aac', '-af', 'loudnorm=I=-16:TP=-1.5:LRA=11', '-y', outputPath);
+        } else {
+            args.push(
+                '-vf', 'scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920',
+                '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '23',
+                '-c:a', 'aac', '-af', 'loudnorm=I=-16:TP=-1.5:LRA=11',
+                '-movflags', '+faststart', '-y', outputPath
+            );
+        }
 
-### Premium Partners
+        // 4. Run FFmpeg
+        const ffmpeg = spawnSync(ffmpegPath, args);
+        if (ffmpeg.status !== 0) throw new Error(`FFmpeg error: ${ffmpeg.stderr?.toString()}`);
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+        // 5. Run FFprobe (from the second layer)
+        const ffprobe = spawnSync(ffprobePath, [
+            '-v', 'error', '-show_entries', 'format=duration', '-of', 'default=noprint_wrappers=1:nokey=1', outputPath
+        ]);
+        const duration = parseFloat(ffprobe.stdout?.toString().trim()) || 0;
 
-## Contributing
+	    const file_path = isVideo ? 'processed/videos' : 'processed/musics';
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+        // 6. Upload to Bunny
+        console.log("Uploading processed file...");
+        const fileBuffer = fs.readFileSync(outputPath);
+        console.log(`https://${BUNNY_REGION}.storage.bunnycdn.com/${BUNNY_STORAGE_ZONE}/${file_path}/${outputFileName}`);
+        const uploadRes = await fetch(`https://${BUNNY_REGION}.storage.bunnycdn.com/${BUNNY_STORAGE_ZONE}/${file_path}/${outputFileName}`, {
+            method: 'PUT',
+            headers: {
+                'AccessKey': BUNNY_ACCESS_KEY,
+                'Content-Type': 'application/octet-stream',
+                'accept': 'application/json'
+            },
+            body: fileBuffer // This is the Node.js equivalent of --data-binary
+        });
 
-## Code of Conduct
+        console.log(`Bunny Response Status: ${uploadRes.status} (${uploadRes.statusText})`);
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+        if (!uploadRes.ok) throw new Error(`Upload failed: ${await uploadRes.text()}`);
 
-## Security Vulnerabilities
+        // 7. Webhook back to Laravel
+        const webhookPayload = { model_id: modelId, model_type: modelType, duration, status: 'success', path: `${file_path}/${outputFileName}` };
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+        await fetch(webhook_url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(webhookPayload)
+        });
 
-## License
+        return { status: 'success', modelId, duration };
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+    } catch (error) {
+        console.error("Critical Error:", error.message);
+
+        // 7. Webhook back to Laravel
+        const webhookPayload = { model_id: modelId, model_type: modelType, duration: 0, status: 'error', path: '' };
+
+        await fetch(webhook_url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(webhookPayload)
+        });            
+
+        return { status: 'error', message: error.message };
+    } finally {
+        // Final Cleanup of /tmp
+        [inputPath, outputPath].forEach(file => {
+            if (fs.existsSync(file)) fs.unlinkSync(file);
+        });
+    }
+};
+```
