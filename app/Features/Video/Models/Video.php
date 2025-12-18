@@ -14,10 +14,49 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property string $id
+ * @property string $user_id
+ * @property string|null $music_id
+ * @property string|null $title
+ * @property string $description
+ * @property string $thumbnail
+ * @property string|null $video_path
+ * @property array<array-key, mixed>|null $images
+ * @property bool $allow_comments
+ * @property VideoPrivacyEnum $privacy
+ * @property VideoStatusEnum $status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read Music|null $music
+ * @property-read User $user
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereAllowComments($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereImages($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereMusicId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video wherePrivacy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereThumbnail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereVideoPath($value)
+ *
+ * @mixin \Eloquent
+ */
 class Video extends Model implements FfmpegInterface
 {
     use HasUuids;
 
+    /**
+     * @var string[]
+     */
     protected $casts = [
         'images' => 'array',
         'allow_comments' => 'boolean',
@@ -25,7 +64,7 @@ class Video extends Model implements FfmpegInterface
         'status' => VideoStatusEnum::class,
     ];
 
-    protected static function boot(): void
+    protected static function booted(): void
     {
         static::creating(function (Video $video): void {
             $user_id = auth()->id();
