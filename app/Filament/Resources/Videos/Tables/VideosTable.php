@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Videos\Tables;
 
+use App\Features\Video\Models\Video;
+use CodeWithDennis\FilamentLucideIcons\Enums\LucideIcon;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Hugomyb\FilamentMediaAction\Actions\MediaAction;
+use Illuminate\Support\Facades\Storage;
 
 class VideosTable
 {
@@ -22,6 +26,16 @@ class VideosTable
                 TextColumn::make('description')
                     ->lineClamp(2)
                     ->wrap(),
+                TextColumn::make('video_path')
+                    ->label('Video')
+                    ->formatStateUsing(fn (): string => '')
+                    ->icon(LucideIcon::Play)
+                    ->iconColor('success')
+                    ->action(
+                        MediaAction::make('video')
+                            ->mediaType(MediaAction::TYPE_VIDEO)
+                            ->media(fn (Video $record) => Storage::url($record->video_path))
+                    ),
                 TextColumn::make('privacy')
                     ->badge(),
                 TextColumn::make('status')

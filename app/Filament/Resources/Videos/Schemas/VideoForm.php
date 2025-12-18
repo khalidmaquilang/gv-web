@@ -23,7 +23,7 @@ class VideoForm
         return $schema
             ->components([
                 FileUpload::make('video_path')
-                    ->directory('video/')
+                    ->directory('videos/')
                     ->columnSpanFull(),
                 Select::make('music_id')
                     ->live()
@@ -53,7 +53,7 @@ class VideoForm
                     ->required()
                     ->columnSpanFull(),
                 FileUpload::make('thumbnail')
-                    ->directory('video/')
+                    ->directory('videos/')
                     ->image()
                     ->required()
                     ->columnSpanFull(),
