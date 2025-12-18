@@ -6,6 +6,7 @@ namespace App\Filament\Resources\Music\Schemas;
 
 use App\Filament\Components\Fields\TextInput\TextInput;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
 
 class MusicForm
@@ -18,6 +19,8 @@ class MusicForm
                     ->required(),
                 TextInput::make('artist')
                     ->required(),
+                Toggle::make('active')
+                    ->default(true),
                 FileUpload::make('path')
                     ->label('Audio File')
                     ->directory('musics')
