@@ -1,122 +1,144 @@
 # Setup AWS Lambda Serverless for audio and video processing
-```php
-import { spawnSync } from 'node:child_process';
-import fs from 'node:fs';
-import path from 'node:path';
-import crypto from 'node:crypto';
-
-// Configuration - Ensure these are set in Lambda Environment Variables
-const BUNNY_STORAGE_ZONE = "gv-dev";
-const BUNNY_ACCESS_KEY = "bunny password";
-const BUNNY_REGION = 'sg';
-
-export const handler = async (event) => {
-    // 0. Extract variables from the event
-    const { modelId, filename, modelType, isVideo } = event;
-
-    if (!modelId || !filename || isVideo == null || !modelType) {
-        return { status: 'error', message: 'Missing modelId or filename or isVideo or modelType in event' };
-    }
-
-    const localInputName = path.basename(filename);
-    const inputPath = `/tmp/${localInputName}`;
-    const outputFileName = `processed_${path.parse(filename).name}.mp4`;
-    const outputPath = `/tmp/${outputFileName}`;
-
-    const ffmpegPath = '/opt/bin/ffmpeg';
-    const ffprobePath = '/opt/bin/ffprobe';
-
-    const webhook_url = 'https://ec4f11df9299.ngrok-free.app/api/v1/webhook/ffmpeg/b714fc8b-9ccb-4de7-9e42-3b8e57670ad6';
-
-    try {
-        // 1. Download
-        console.log(`Downloading ${filename}...`);
-        const downloadRes = await fetch(`https://${BUNNY_STORAGE_ZONE}.b-cdn.net/${filename}`, {
-            headers: { 'AccessKey': BUNNY_ACCESS_KEY }
-        });
-
-        if (!downloadRes.ok) throw new Error(`Download failed: ${downloadRes.status}`);
-        fs.writeFileSync(inputPath, Buffer.from(await downloadRes.arrayBuffer()));
-
-        // 2. Identify Media Type
-        console.log(`Processing ${isVideo ? 'Video' : 'Audio'}: ${filename}`);
-
-        // 3. Construct FFmpeg Args
-        let args = ['-i', inputPath];
-        if (! isVideo) {
-            args.push('-c:a', 'aac', '-af', 'loudnorm=I=-16:TP=-1.5:LRA=11', '-y', outputPath);
-        } else {
-            args.push(
-                '-vf', 'scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920',
-                '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '23',
-                '-c:a', 'aac', '-af', 'loudnorm=I=-16:TP=-1.5:LRA=11',
-                '-movflags', '+faststart', '-y', outputPath
-            );
+- Setup the layer first
+  - Download ffmpeg-release-amd64-static.tar.xz at https://johnvansickle.com/ffmpeg/
+  - Create two layers (ffmpeg and ffprob)
+  - First layer
+    - create a bin folder
+    - put ffmpeg
+    - zip bin
+    - upload
+  - Second Layer
+    - create a bin folder
+    - put ffprob
+    - zip bin
+    - upload
+- Create lambda function
+    ```php
+    import { spawnSync } from 'node:child_process';
+    import fs from 'node:fs';
+    import path from 'node:path';
+    import crypto from 'node:crypto';
+    
+    // Configuration - Ensure these are set in Lambda Environment Variables
+    const BUNNY_STORAGE_ZONE = "gv-dev";
+    const BUNNY_ACCESS_KEY = "XXXXXX";
+    const BUNNY_REGION = 'sg';
+    
+    export const handler = async (event) => {
+        const { modelId, filename, modelType, isVideo, musicFilename } = event;
+    
+        if (!modelId || !filename || isVideo == null || !modelType) {
+            return { status: 'error', message: 'Missing modelId, filename, isVideo, or modelType' };
         }
-
-        // 4. Run FFmpeg
-        const ffmpeg = spawnSync(ffmpegPath, args);
-        if (ffmpeg.status !== 0) throw new Error(`FFmpeg error: ${ffmpeg.stderr?.toString()}`);
-
-        // 5. Run FFprobe (from the second layer)
-        const ffprobe = spawnSync(ffprobePath, [
-            '-v', 'error', '-show_entries', 'format=duration', '-of', 'default=noprint_wrappers=1:nokey=1', outputPath
-        ]);
-        const duration = parseFloat(ffprobe.stdout?.toString().trim()) || 0;
-
-	    const file_path = isVideo ? 'processed/videos' : 'processed/musics';
-
-        // 6. Upload to Bunny
-        console.log("Uploading processed file...");
-        const fileBuffer = fs.readFileSync(outputPath);
-        console.log(`https://${BUNNY_REGION}.storage.bunnycdn.com/${BUNNY_STORAGE_ZONE}/${file_path}/${outputFileName}`);
-        const uploadRes = await fetch(`https://${BUNNY_REGION}.storage.bunnycdn.com/${BUNNY_STORAGE_ZONE}/${file_path}/${outputFileName}`, {
-            method: 'PUT',
-            headers: {
-                'AccessKey': BUNNY_ACCESS_KEY,
-                'Content-Type': 'application/octet-stream',
-                'accept': 'application/json'
-            },
-            body: fileBuffer // This is the Node.js equivalent of --data-binary
-        });
-
-        console.log(`Bunny Response Status: ${uploadRes.status} (${uploadRes.statusText})`);
-
-        if (!uploadRes.ok) throw new Error(`Upload failed: ${await uploadRes.text()}`);
-
-        // 7. Webhook back to Laravel
-        const webhookPayload = { model_id: modelId, model_type: modelType, duration, status: 'success', path: `${file_path}/${outputFileName}` };
-
-        await fetch(webhook_url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(webhookPayload)
-        });
-
-        return { status: 'success', modelId, duration };
-
-    } catch (error) {
-        console.error("Critical Error:", error.message);
-
-        // 7. Webhook back to Laravel
-        const webhookPayload = { model_id: modelId, model_type: modelType, duration: 0, status: 'error', path: '' };
-
-        await fetch(webhook_url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(webhookPayload)
-        });            
-
-        return { status: 'error', message: error.message };
-    } finally {
-        // Final Cleanup of /tmp
-        [inputPath, outputPath].forEach(file => {
-            if (fs.existsSync(file)) fs.unlinkSync(file);
-        });
-    }
-};
-```
+    
+        const localInputName = path.basename(filename);
+        const videoInputPath = `/tmp/vid_${localInputName}`;
+        const musicInputPath = musicFilename ? `/tmp/mus_${path.basename(musicFilename)}` : null;
+        const outputFileName = `processed_${path.parse(localInputName).name}.mp4`;
+        const outputPath = `/tmp/${outputFileName}`;
+    
+        const ffmpegPath = '/opt/bin/ffmpeg';
+        const ffprobePath = '/opt/bin/ffprobe';
+        const webhook_url = 'https://eb5c238860c7.ngrok-free.app/api/v1/webhook/ffmpeg/b714fc8b-9ccb-4de7-9e42-3b8e57670ad6';
+    
+        try {
+            // 1. Download Main File
+            console.log(`Downloading ${filename}...`);
+            const downloadRes = await fetch(`https://${BUNNY_STORAGE_ZONE}.b-cdn.net/${filename}`, {
+                headers: { 'AccessKey': BUNNY_ACCESS_KEY }
+            });
+            if (!downloadRes.ok) throw new Error(`Video Download failed: ${downloadRes.status}`);
+            fs.writeFileSync(videoInputPath, Buffer.from(await downloadRes.arrayBuffer()));
+    
+            // 2. Download Music (If provided)
+            if (musicInputPath) {
+                console.log(`Downloading music: ${musicFilename}`);
+                const musRes = await fetch(`https://${BUNNY_STORAGE_ZONE}.b-cdn.net/${musicFilename}`, {
+                    headers: { 'AccessKey': BUNNY_ACCESS_KEY }
+                });
+                if (!musRes.ok) throw new Error(`Music Download failed: ${musRes.status}`);
+                fs.writeFileSync(musicInputPath, Buffer.from(await musRes.arrayBuffer()));
+            }
+    
+            console.log(`Processing ${isVideo ? 'Video' : 'Audio'}: ${filename}`);
+    
+            // 3. Construct FFmpeg Args
+            let args = ['-i', videoInputPath];
+    
+            if (musicInputPath) {
+                // MERGE LOGIC (Mutes original video, uses external audio)
+                args.push('-i', musicInputPath);
+                args.push(
+                    '-map', '0:v:0',
+                    '-map', '1:a:0',
+                    '-vf', 'scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920',
+                    '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '23', '-pix_fmt', 'yuv420p',
+                    '-c:a', 'aac', '-b:a', '128k',
+                    '-shortest',
+                    '-movflags', '+faststart', '-y', outputPath
+                );
+            } else if (!isVideo) {
+                // AUDIO ONLY
+                args.push('-c:a', 'aac', '-b:a', '192k', '-af', 'loudnorm=I=-16:TP=-1.5:LRA=11', '-y', outputPath);
+            } else {
+                // VIDEO ONLY (Normalizes existing audio)
+                args.push(
+                    '-vf', 'scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920',
+                    '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '23', '-pix_fmt', 'yuv420p',
+                    '-c:a', 'aac', '-af', 'loudnorm=I=-16:TP=-1.5:LRA=11',
+                    '-movflags', '+faststart', '-y', outputPath
+                );
+            }
+    
+            // 4. Run FFmpeg
+            const ffmpeg = spawnSync(ffmpegPath, args);
+            if (ffmpeg.status !== 0) throw new Error(`FFmpeg error: ${ffmpeg.stderr?.toString()}`);
+    
+            // 5. Get Duration
+            const ffprobe = spawnSync(ffprobePath, [
+                '-v', 'error', '-show_entries', 'format=duration', '-of', 'default=noprint_wrappers=1:nokey=1', outputPath
+            ]);
+            const duration = parseFloat(ffprobe.stdout?.toString().trim()) || 0;
+    
+            const file_path = isVideo ? 'processed/videos' : 'processed/musics';
+    
+            // 6. Upload to Bunny
+            console.log("Uploading to Bunny Storage...");
+            const uploadRes = await fetch(`https://${BUNNY_REGION}.storage.bunnycdn.com/${BUNNY_STORAGE_ZONE}/${file_path}/${outputFileName}`, {
+                method: 'PUT',
+                headers: {
+                    'AccessKey': BUNNY_ACCESS_KEY,
+                    'Content-Type': isVideo ? 'video/mp4' : 'audio/mp4',
+                },
+                body: fs.readFileSync(outputPath)
+            });
+    
+            if (!uploadRes.ok) throw new Error(`Upload failed: ${await uploadRes.text()}`);
+    
+            // 7. Webhook Success
+            await fetch(webhook_url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ model_id: modelId, model_type: modelType, duration, status: 'success', path: `${file_path}/${outputFileName}` })
+            });
+    
+            return { status: 'success', modelId, duration };
+    
+        } catch (error) {
+            console.error("Critical Error:", error.message);
+            // Webhook Error
+            await fetch(webhook_url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ model_id: modelId, model_type: modelType, duration: 0, status: 'error', message: error.message })
+            });
+            return { status: 'error', message: error.message };
+        } finally {
+            // Safe Cleanup
+            [videoInputPath, musicInputPath, outputPath].forEach(file => {
+                if (file && fs.existsSync(file)) fs.unlinkSync(file);
+            });
+        }
+    };
+    ```
+- Add the two layers

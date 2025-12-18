@@ -21,7 +21,10 @@ class MusicTable
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
+                TextColumn::make('name')
+                    ->searchable(),
+                TextColumn::make('artist')
+                    ->searchable(),
                 TextColumn::make('status')
                     ->badge(),
                 TextColumn::make('path')
@@ -37,9 +40,6 @@ class MusicTable
                 IconColumn::make('active')
                     ->boolean(),
             ])
-            ->filters([
-                //
-            ])
             ->recordActions([
                 EditAction::make(),
             ])
@@ -47,6 +47,7 @@ class MusicTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 }
