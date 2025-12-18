@@ -8,11 +8,13 @@ use App\Features\Music\Models\Music;
 use App\Features\User\Models\User;
 use App\Features\Video\Enums\VideoPrivacyEnum;
 use App\Features\Video\Enums\VideoStatusEnum;
+use App\Features\Webhook\Enums\WebhookEnum;
+use App\Features\Webhook\Models\Interfaces\FfmpegInterface;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Video extends Model
+class Video extends Model implements FfmpegInterface
 {
     use HasUuids;
 
@@ -48,5 +50,18 @@ class Video extends Model
     public function music(): BelongsTo
     {
         return $this->belongsTo(Music::class);
+    }
+
+    public static function updateMediaStatus(string $model_id, WebhookEnum $status, int $duration, string $path): void
+    {
+        $video = static::find($model_id);
+        if ($video === null) {
+            return;
+        }
+
+        $video->update([
+            'status' => $status->toVideo(),
+            'video_path' => blank($path) ? $video->video_path : $path,
+        ]);
     }
 }
