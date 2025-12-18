@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class MyVideoController extends Controller
+class MyVideosController extends Controller
 {
     public function __construct(protected GetMyVideosAction $get_my_videos_action) {}
 

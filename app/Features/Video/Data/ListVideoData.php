@@ -11,6 +11,7 @@ use Spatie\LaravelData\Data;
 class ListVideoData extends Data
 {
     public function __construct(
+        public string $id,
         public string $thumbnail,
         public VideoPrivacyEnum $privacy,
         public int $views = 0

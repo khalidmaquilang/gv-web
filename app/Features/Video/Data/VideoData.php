@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Features\Video\Data;
 
 use App\Features\Music\Data\MusicData;
+use App\Features\User\UserData;
 use App\Features\Video\Enums\VideoPrivacyEnum;
 use Illuminate\Support\Facades\Storage;
 use Spatie\LaravelData\Data;
@@ -16,6 +17,7 @@ class VideoData extends Data
         public string|Optional $title,
         public string $description,
         public MusicData|Optional $music,
+        public UserData|Optional $user,
         public string $thumbnail,
         public string|Optional $video_path,
         public array|Optional $images,

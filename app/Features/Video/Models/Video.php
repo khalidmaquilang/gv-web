@@ -8,8 +8,11 @@ use App\Features\Music\Models\Music;
 use App\Features\User\Models\User;
 use App\Features\Video\Enums\VideoPrivacyEnum;
 use App\Features\Video\Enums\VideoStatusEnum;
+use App\Features\Video\Policies\VideoPolicy;
 use App\Features\Webhook\Enums\WebhookEnum;
 use App\Features\Webhook\Models\Interfaces\FfmpegInterface;
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -31,25 +34,27 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read Music|null $music
  * @property-read User $user
  *
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Video newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Video newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Video query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereAllowComments($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereImages($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereMusicId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Video wherePrivacy($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereThumbnail($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereTitle($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereUserId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Video whereVideoPath($value)
+ * @method static Builder<static>|Video newModelQuery()
+ * @method static Builder<static>|Video newQuery()
+ * @method static Builder<static>|Video published()
+ * @method static Builder<static>|Video query()
+ * @method static Builder<static>|Video whereAllowComments($value)
+ * @method static Builder<static>|Video whereCreatedAt($value)
+ * @method static Builder<static>|Video whereDescription($value)
+ * @method static Builder<static>|Video whereId($value)
+ * @method static Builder<static>|Video whereImages($value)
+ * @method static Builder<static>|Video whereMusicId($value)
+ * @method static Builder<static>|Video wherePrivacy($value)
+ * @method static Builder<static>|Video whereStatus($value)
+ * @method static Builder<static>|Video whereThumbnail($value)
+ * @method static Builder<static>|Video whereTitle($value)
+ * @method static Builder<static>|Video whereUpdatedAt($value)
+ * @method static Builder<static>|Video whereUserId($value)
+ * @method static Builder<static>|Video whereVideoPath($value)
  *
  * @mixin \Eloquent
  */
+#[UsePolicy(VideoPolicy::class)]
 class Video extends Model implements FfmpegInterface
 {
     use HasUuids;
@@ -89,6 +94,15 @@ class Video extends Model implements FfmpegInterface
     public function music(): BelongsTo
     {
         return $this->belongsTo(Music::class);
+    }
+
+    /**
+     * @param  Builder<Video>  $query
+     * @return Builder<Video>
+     */
+    public function scopePublished(Builder $query): Builder
+    {
+        return $query->whereIn('status', [VideoStatusEnum::Processed, VideoStatusEnum::Approved]);
     }
 
     public static function updateMediaStatus(string $model_id, WebhookEnum $status, int $duration, string $path): void
