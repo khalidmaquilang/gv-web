@@ -22,7 +22,7 @@ class CreateVideo extends CreateRecord
             ->handle(
                 model_id: $video->id,
                 model_type: Video::class,
-                file_path: $video->path,
+                file_path: $video->video_path,
                 is_video: false,
                 music_path: $video->music->path ?? null,
             );
