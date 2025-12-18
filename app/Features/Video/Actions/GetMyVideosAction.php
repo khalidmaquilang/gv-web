@@ -15,7 +15,6 @@ class GetMyVideosAction
         abort_if($user === null, 404);
 
         return Video::query()
-            ->with('music')
             ->where('user_id', $user->id)
             ->latest()
             ->paginate(10);
