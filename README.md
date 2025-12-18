@@ -66,13 +66,21 @@
             let args = ['-i', videoInputPath];
     
             if (musicInputPath) {
-                // MERGE LOGIC (Mutes original video, uses external audio)
+            // MERGE LOGIC (Mutes original video, uses external audio)
                 args.push('-i', musicInputPath);
                 args.push(
                     '-map', '0:v:0',
                     '-map', '1:a:0',
-                    '-vf', 'scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920',
-                    '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '23', '-pix_fmt', 'yuv420p',
+                    // 1. Force 9:16, convert to yuv420p (8-bit)
+                    '-vf', 'scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,format=yuv420p',
+                    // 2. Cap framerate to 30fps to avoid decoder overloads
+                    '-r', '30',
+                    '-c:v', 'libx264',
+                    '-preset', 'veryfast',
+                    '-crf', '23',
+                    // 3. Use 'Main' profile instead of 'High' for wider device support
+                    '-profile:v', 'main',
+                    '-level', '4.0',
                     '-c:a', 'aac', '-b:a', '128k',
                     '-shortest',
                     '-movflags', '+faststart', '-y', outputPath
@@ -83,8 +91,13 @@
             } else {
                 // VIDEO ONLY (Normalizes existing audio)
                 args.push(
-                    '-vf', 'scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920',
-                    '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '23', '-pix_fmt', 'yuv420p',
+                    '-vf', 'scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,format=yuv420p',
+                    '-r', '30',
+                    '-c:v', 'libx264',
+                    '-preset', 'veryfast',
+                    '-crf', '23',
+                    '-profile:v', 'main',
+                    '-level', '4.0',
                     '-c:a', 'aac', '-af', 'loudnorm=I=-16:TP=-1.5:LRA=11',
                     '-movflags', '+faststart', '-y', outputPath
                 );

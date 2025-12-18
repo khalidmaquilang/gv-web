@@ -14,16 +14,22 @@ use Spatie\LaravelData\Optional;
 class VideoData extends Data
 {
     public function __construct(
+        public string $id,
+        public string|Optional $thumbnail,
         public string|Optional $title,
         public string $description,
         public MusicData|Optional $music,
         public UserData|Optional $user,
-        public string $thumbnail,
         public string|Optional $video_path,
         public array|Optional $images,
         public bool $allow_comments,
         public VideoPrivacyEnum $privacy,
+        public int|Optional $views
     ) {
+        if ($thumbnail) {
+            $this->thumbnail = Storage::url($thumbnail);
+        }
+
         if ($video_path) {
             $this->video_path = Storage::url($video_path);
         }
