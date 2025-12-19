@@ -39,6 +39,13 @@ class MusicForm
                     ])
                     ->required()
                     ->columnSpanFull(),
+                FileUpload::make('thumbnail')
+                    ->helperText('Recommended Size: 300x300 pixels')
+                    ->required()
+                    ->image()
+                    ->maxSize(1024)
+                    ->directory('processed/musics')
+                    ->columnSpanFull(),
             ]);
     }
 }

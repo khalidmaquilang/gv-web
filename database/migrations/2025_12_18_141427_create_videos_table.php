@@ -18,8 +18,8 @@ return new class extends Migration
             $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
             $table->foreignUuid('music_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('title')->nullable()->comment('for photos');
-            $table->text('description');
-            $table->string('thumbnail');
+            $table->text('description')->nullable();
+            $table->string('thumbnail')->nullable();
             $table->string('video_path')->nullable();
             $table->json('images')->nullable();
             $table->boolean('allow_comments')->default(true);

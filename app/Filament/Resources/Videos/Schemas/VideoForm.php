@@ -24,6 +24,10 @@ class VideoForm
             ->components([
                 FileUpload::make('video_path')
                     ->directory('videos')
+                    ->acceptedFileTypes([
+                        'video/mp4',
+                        'video/quicktime',
+                    ])
                     ->columnSpanFull(),
                 Select::make('music_id')
                     ->live()
@@ -50,11 +54,6 @@ class VideoForm
                 Toggle::make('allow_comments')
                     ->default(true),
                 Textarea::make('description')
-                    ->required()
-                    ->columnSpanFull(),
-                FileUpload::make('thumbnail')
-                    ->directory('videos')
-                    ->image()
                     ->required()
                     ->columnSpanFull(),
             ]);

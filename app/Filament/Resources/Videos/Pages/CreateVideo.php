@@ -27,7 +27,7 @@ class CreateVideo extends CreateRecord
                 model_type: Video::class,
                 file_path: $video->video_path,
                 is_video: true,
-                music_path: $video->music->path ?? null,
+                thumbnail_path: $video->thumbnail,
             );
     }
 }

@@ -22,13 +22,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $user_id
  * @property string|null $music_id
  * @property string|null $title
- * @property string $description
- * @property string $thumbnail
+ * @property string|null $description
+ * @property string|null $thumbnail
  * @property string|null $video_path
  * @property array<array-key, mixed>|null $images
  * @property bool $allow_comments
  * @property VideoPrivacyEnum $privacy
  * @property VideoStatusEnum $status
+ * @property int $views
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read Music|null $music
@@ -51,6 +52,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder<static>|Video whereUpdatedAt($value)
  * @method static Builder<static>|Video whereUserId($value)
  * @method static Builder<static>|Video whereVideoPath($value)
+ * @method static Builder<static>|Video whereViews($value)
  *
  * @mixin \Eloquent
  */
@@ -105,7 +107,7 @@ class Video extends Model implements FfmpegInterface
         return $query->whereIn('status', [VideoStatusEnum::Processed, VideoStatusEnum::Approved]);
     }
 
-    public static function updateMediaStatus(string $model_id, WebhookEnum $status, int $duration, string $path): void
+    public static function updateMediaStatus(string $model_id, WebhookEnum $status, int $duration, string $path, string $thumbnail_path): void
     {
         $video = static::find($model_id);
         if ($video === null) {
@@ -115,6 +117,7 @@ class Video extends Model implements FfmpegInterface
         $video->update([
             'status' => $status->toVideo(),
             'video_path' => blank($path) ? $video->video_path : $path,
+            'thumbnail' => $thumbnail_path,
         ]);
     }
 }

@@ -11,10 +11,9 @@ use Spatie\LaravelData\Data;
 class VideoUploadData extends Data
 {
     public function __construct(
-        public string $description,
-        public string $thumbnail,
-        public bool $allow_comments,
-        public VideoPrivacyEnum $privacy,
+        public ?string $description = null,
+        public bool $allow_comments = false,
+        public ?VideoPrivacyEnum $privacy = null,
         public ?UploadedFile $video = null,
         public ?array $images = null,
         public ?string $music_id = null,
@@ -24,7 +23,7 @@ class VideoUploadData extends Data
     public static function rules(): array
     {
         return [
-            'description' => ['required', 'string'],
+            'description' => ['nullable', 'string'],
             'allow_comments' => ['required', 'boolean'],
             'privacy' => ['required', 'in:'.implode(',', VideoPrivacyEnum::toArray())],
 
@@ -58,8 +57,7 @@ class VideoUploadData extends Data
             ],
 
             // Optional
-            'music_id' => ['nullable', 'string'],
-            'thumbnail' => ['nullable', 'string'],
+            'music_id' => ['nullable', 'string', 'exists:music,id'],
         ];
     }
 }

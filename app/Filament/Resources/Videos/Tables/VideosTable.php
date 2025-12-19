@@ -28,6 +28,7 @@ class VideosTable
                     ->wrap(),
                 TextColumn::make('video_path')
                     ->label('Video')
+                    ->alignCenter()
                     ->formatStateUsing(fn (): string => '')
                     ->icon(LucideIcon::Play)
                     ->iconColor('success')

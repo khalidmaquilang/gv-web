@@ -23,7 +23,7 @@ class WebhookFfmpegController extends Controller
             return response()->json(['message' => 'error'], 400);
         }
 
-        $model::updateMediaStatus($request->model_id, $request->status, $request->duration, $request->path);
+        $model::updateMediaStatus($request->model_id, $request->status, $request->duration, $request->path, $request->thumbnail_path);
 
         return response()->json(['message' => 'ok']);
     }

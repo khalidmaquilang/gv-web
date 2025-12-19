@@ -8,5 +8,11 @@ use App\Features\Webhook\Enums\WebhookEnum;
 
 interface FfmpegInterface
 {
-    public static function updateMediaStatus(string $model_id, WebhookEnum $status, int $duration, string $path): void;
+    public static function updateMediaStatus(
+        string $model_id,
+        WebhookEnum $status,
+        int $duration,
+        string $path,
+        string $thumbnail_path
+    ): void;
 }

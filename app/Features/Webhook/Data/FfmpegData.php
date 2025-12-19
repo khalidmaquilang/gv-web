@@ -15,5 +15,6 @@ class FfmpegData extends Data
         public int $duration,
         public WebhookEnum $status,
         public string $path,
+        public string $thumbnail_path,
     ) {}
 }

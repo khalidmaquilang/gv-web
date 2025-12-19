@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string $artist
  * @property string $path
+ * @property string|null $thumbnail
  * @property bool $active
  * @property int|null $duration
  * @property MusicStatusEnum $status
@@ -35,6 +36,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder<static>|Music whereName($value)
  * @method static Builder<static>|Music wherePath($value)
  * @method static Builder<static>|Music whereStatus($value)
+ * @method static Builder<static>|Music whereThumbnail($value)
  * @method static Builder<static>|Music whereUpdatedAt($value)
  *
  * @mixin \Eloquent
@@ -76,7 +78,7 @@ class Music extends Model implements FfmpegInterface
             ->where('status', MusicStatusEnum::Processed);
     }
 
-    public static function updateMediaStatus(string $model_id, WebhookEnum $status, int $duration, string $path): void
+    public static function updateMediaStatus(string $model_id, WebhookEnum $status, int $duration, string $path, string $thumbnail_path): void
     {
         $music = static::find($model_id);
         if ($music === null) {

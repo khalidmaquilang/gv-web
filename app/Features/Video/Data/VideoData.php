@@ -7,6 +7,7 @@ namespace App\Features\Video\Data;
 use App\Features\Music\Data\MusicData;
 use App\Features\User\UserData;
 use App\Features\Video\Enums\VideoPrivacyEnum;
+use App\Features\Video\Enums\VideoStatusEnum;
 use Illuminate\Support\Facades\Storage;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Optional;
@@ -24,13 +25,14 @@ class VideoData extends Data
         public array|Optional $images,
         public bool $allow_comments,
         public VideoPrivacyEnum $privacy,
+        public VideoStatusEnum $status,
         public int|Optional $views
     ) {
-        if ($thumbnail) {
+        if ($thumbnail && ! $thumbnail instanceof Optional) {
             $this->thumbnail = Storage::url($thumbnail);
         }
 
-        if ($video_path) {
+        if ($video_path && ! $video_path instanceof Optional) {
             $this->video_path = Storage::url($video_path);
         }
     }
