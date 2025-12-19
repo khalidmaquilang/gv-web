@@ -16,6 +16,7 @@ class GetMyVideosAction
 
         return Video::query()
             ->where('user_id', $user->id)
+            ->with(['music', 'user'])
             ->latest()
             ->paginate(10);
     }
