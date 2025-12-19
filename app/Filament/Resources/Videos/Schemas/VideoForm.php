@@ -6,6 +6,7 @@ namespace App\Filament\Resources\Videos\Schemas;
 
 use App\Features\Music\Models\Music;
 use App\Features\Video\Enums\VideoPrivacyEnum;
+use App\Features\Video\Models\Video;
 use CodeWithDennis\FilamentLucideIcons\Enums\LucideIcon;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
@@ -20,10 +21,13 @@ class VideoForm
 {
     public static function configure(Schema $schema): Schema
     {
+        $user_id = auth()->id();
+        abort_if($user_id === null, 404);
+
         return $schema
             ->components([
                 FileUpload::make('video_path')
-                    ->directory('videos')
+                    ->directory(Video::getVideoPath($user_id))
                     ->acceptedFileTypes([
                         'video/mp4',
                         'video/quicktime',

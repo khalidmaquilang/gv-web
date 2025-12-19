@@ -120,4 +120,9 @@ class Video extends Model implements FfmpegInterface
             'thumbnail' => $thumbnail_path,
         ]);
     }
+
+    public static function getVideoPath(string $user_id): string
+    {
+        return $user_id.'/videos';
+    }
 }

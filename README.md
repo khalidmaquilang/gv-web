@@ -26,7 +26,7 @@
   const WEBHOOK_URL = 'https://eb5c238860c7.ngrok-free.app/api/v1/webhook/ffmpeg/b714fc8b-9ccb-4de7-9e42-3b8e57670ad6';
   
   export const handler = async (event) => {
-    const { modelId, filename, modelType, isVideo, musicFilename } = event;
+    const { modelId, filename, modelType, isVideo, musicFilename, userId } = event;
 
     if (!modelId || !filename || isVideo == null || !modelType ) {
         return { status: 'error', message: 'Missing modelId, filename, isVideo, or modelType' };
@@ -117,7 +117,7 @@
         ]);
         const duration = parseFloat(ffprobe.stdout?.toString().trim()) || 0;
 
-        const file_path = isVideo ? 'processed/videos' : 'processed/musics';
+        const file_path = isVideo ? `${userId}/processed/videos` : 'processed/musics';
 
         // 7. Upload to Bunny
         console.log("Uploading to Bunny Storage...");
