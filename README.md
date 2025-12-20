@@ -192,3 +192,65 @@
   };
     ```
 - Add the two layers
+
+# Setup RTMP Server
+- Make sure you have nginx installed on your server
+- Run `sudo apt install libnginx-mod-rtmp`
+- `sudo nano /etc/nginx/nginx.conf`
+  ```
+    rtmp {
+    server {
+        listen 1935;
+        chunk_size 4096;
+
+        application live {
+            live on;
+            record off;
+
+            # FIXED PATH: Save directly into the "public" folder so it is accessible via URL
+            hls on;
+            hls_path /home/forge/rtmp.maralabs.ph/public/hls;
+            hls_fragment 1;
+            hls_playlist_length 6;
+            hls_cleanup on;
+        }
+    }
+  }
+  ```
+- In your site nginx config, add this to your server block
+  ```php
+  # HLS files (general)
+  location /hls/ {
+      root /home/forge/rtmp.maralabs.ph/public;
+      add_header Access-Control-Allow-Origin "*" always;
+      add_header Access-Control-Expose-Headers "Content-Length";
+      try_files $uri =404;
+  }
+
+  # Playlist (.m3u8)
+  location ~* /hls/.+\.m3u8$ {
+      root /home/forge/rtmp.maralabs.ph/public;
+      add_header Cache-Control "public, max-age=2, must-revalidate";
+      add_header Access-Control-Allow-Origin "*" always;
+      try_files $uri =404;
+  }
+
+  # Segments (.ts, .m4s)
+  location ~* /hls/.+\.(ts|m4s)$ {
+      root /home/forge/rtmp.maralabs.ph/public;
+      add_header Cache-Control "public, max-age=600, immutable";
+      add_header Access-Control-Allow-Origin "*" always;
+      try_files $uri =404;
+  }
+  ```
+# Setup your cloudflare
+- go to Caching > Caching Rules
+- create 2 rules
+  - HLS Segment Rule
+    - (ends_with(http.request.uri.path, ".ts")) or (ends_with(http.request.uri.path, ".m4s"))
+    - Edge TTL is 10 minutes
+    - Browser TTL is Respect Origin TTL
+  - Playlist (.m3u8)
+    - (ends_with(http.request.uri.path, ".m3u8"))
+    - Edge TTL is 2 seconds
+    - Browser TTL is Respect Origin TTL
