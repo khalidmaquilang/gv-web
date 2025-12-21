@@ -97,6 +97,7 @@
             args.push(
                 '-vf', 'scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,format=yuv420p',
                 '-r', '30',
+                '-t', '60',
                 '-c:v', 'libx264',
                 '-preset', 'veryfast',
                 '-crf', '23',
