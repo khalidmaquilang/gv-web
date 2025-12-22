@@ -1,7 +1,7 @@
 <?php
 
-use App\Features\Video\Enums\FeedPrivacyEnum;
-use App\Features\Video\Enums\FeedStatusEnum;
+use App\Features\Feed\Enums\FeedPrivacyEnum;
+use App\Features\Feed\Enums\FeedStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

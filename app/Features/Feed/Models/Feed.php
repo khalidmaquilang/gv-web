@@ -16,15 +16,35 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
+ * @property string $id
+ * @property string $user_id
+ * @property string $content_type
+ * @property string $content_id
+ * @property string|null $title
+ * @property bool $allow_comments
  * @property FeedPrivacyEnum $privacy
  * @property FeedStatusEnum $status
+ * @property int $views
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read Feed $content
- * @property-read User|null $user
+ * @property-read User $user
  *
  * @method static Builder<static>|Feed newModelQuery()
  * @method static Builder<static>|Feed newQuery()
  * @method static Builder<static>|Feed published()
  * @method static Builder<static>|Feed query()
+ * @method static Builder<static>|Feed whereAllowComments($value)
+ * @method static Builder<static>|Feed whereContentId($value)
+ * @method static Builder<static>|Feed whereContentType($value)
+ * @method static Builder<static>|Feed whereCreatedAt($value)
+ * @method static Builder<static>|Feed whereId($value)
+ * @method static Builder<static>|Feed wherePrivacy($value)
+ * @method static Builder<static>|Feed whereStatus($value)
+ * @method static Builder<static>|Feed whereTitle($value)
+ * @method static Builder<static>|Feed whereUpdatedAt($value)
+ * @method static Builder<static>|Feed whereUserId($value)
+ * @method static Builder<static>|Feed whereViews($value)
  *
  * @mixin \Eloquent
  */

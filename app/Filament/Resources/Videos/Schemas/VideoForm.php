@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Videos\Schemas;
 
+use App\Features\Feed\Enums\FeedPrivacyEnum;
 use App\Features\Music\Models\Music;
-use App\Features\Video\Enums\FeedPrivacyEnum;
 use App\Features\Video\Models\Video;
 use CodeWithDennis\FilamentLucideIcons\Enums\LucideIcon;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Hugomyb\FilamentMediaAction\Actions\MediaAction;
@@ -51,14 +52,19 @@ class VideoForm
                             })
                             ->visible(fn (Get $get): bool => $get('music_id') !== null)
                     ),
-                Select::make('privacy')
-                    ->options(FeedPrivacyEnum::class)
-                    ->default(FeedPrivacyEnum::PublicView)
-                    ->required(),
-                Toggle::make('allow_comments')
-                    ->default(true),
-                Textarea::make('description')
-                    ->required()
+                Group::make([
+                    Select::make('privacy')
+                        ->options(FeedPrivacyEnum::class)
+                        ->default(FeedPrivacyEnum::PublicView)
+                        ->required(),
+                    Toggle::make('allow_comments')
+                        ->default(true),
+                    Textarea::make('title')
+                        ->label('Description')
+                        ->required()
+                        ->columnSpanFull(),
+                ])
+                    ->relationship('feed')
                     ->columnSpanFull(),
             ]);
     }
