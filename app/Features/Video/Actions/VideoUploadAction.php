@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Features\Video\Actions;
 
 use App\Features\Feed\Enums\FeedPrivacyEnum;
-use App\Features\Feed\Enums\FeedStatusEnum;
 use App\Features\Feed\Models\Feed;
 use App\Features\Shared\Actions\FfmpegAction;
 use App\Features\Video\Data\VideoUploadData;
@@ -35,7 +34,6 @@ class VideoUploadAction
                 'title' => $data->description ?? '',
                 'allow_comments' => $data->allow_comments ?? false,
                 'privacy' => $data->privacy ?? FeedPrivacyEnum::PublicView,
-                'status' => FeedStatusEnum::Processing,
             ]);
 
             $feed->content()->associate($video);

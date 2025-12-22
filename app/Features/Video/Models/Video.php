@@ -6,11 +6,8 @@ namespace App\Features\Video\Models;
 
 use App\Features\Feed\Models\Feed;
 use App\Features\Music\Models\Music;
-use App\Features\Video\Enums\FeedStatusEnum;
-use App\Features\Video\Policies\VideoPolicy;
 use App\Features\Webhook\Enums\WebhookEnum;
 use App\Features\Webhook\Models\Interfaces\FfmpegInterface;
-use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
@@ -39,21 +36,9 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
  *
  * @mixin \Eloquent
  */
-#[UsePolicy(VideoPolicy::class)]
 class Video extends Model implements FfmpegInterface
 {
     use HasUuids;
-
-    protected static function booted(): void
-    {
-        static::creating(function (Video $video): void {
-            $user_id = auth()->id();
-            abort_if($user_id === null, 404);
-
-            $video->user_id = $user_id;
-            $video->status = FeedStatusEnum::Processing;
-        });
-    }
 
     /**
      * @return BelongsTo<Music, $this>

@@ -8,7 +8,7 @@ use App\Features\Feed\Enums\FeedPrivacyEnum;
 use App\Features\User\Models\User;
 use App\Features\Video\Models\Video;
 
-class VideoPolicy
+class FeedPolicy
 {
     public function view(User $user, Video $video): bool
     {

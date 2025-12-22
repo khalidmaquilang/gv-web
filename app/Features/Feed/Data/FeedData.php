@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Features\Feed\Data;
 
+use App\Features\Feed\Enums\FeedPrivacyEnum;
+use App\Features\Feed\Enums\FeedStatusEnum;
 use App\Features\User\Data\UserData;
 use App\Features\Video\Data\VideoData;
-use App\Features\Video\Enums\FeedPrivacyEnum;
-use App\Features\Video\Enums\FeedStatusEnum;
 use Spatie\LaravelData\Data;
 
 class FeedData extends Data

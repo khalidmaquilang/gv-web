@@ -7,6 +7,8 @@ namespace App\Features\Feed\Models;
 use App\Features\Feed\Enums\FeedPrivacyEnum;
 use App\Features\Feed\Enums\FeedStatusEnum;
 use App\Features\User\Models\User;
+use App\Features\Video\Policies\FeedPolicy;
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
@@ -26,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  *
  * @mixin \Eloquent
  */
+#[UsePolicy(FeedPolicy::class)]
 class Feed extends Model
 {
     use HasUuids;
@@ -38,6 +41,17 @@ class Feed extends Model
         'privacy' => FeedPrivacyEnum::class,
         'status' => FeedStatusEnum::class,
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (Feed $feed): void {
+            $user_id = auth()->id();
+            abort_if($user_id === null, 404);
+
+            $feed->user_id = $user_id;
+            $feed->status = FeedStatusEnum::Processing;
+        });
+    }
 
     /**
      * @return MorphTo<Feed, $this>
