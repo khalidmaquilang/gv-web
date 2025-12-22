@@ -17,7 +17,7 @@ class GetMyVideosAction
 
         return Video::query()
             ->whereHas('feed', fn (Builder $query) => $query->where('user_id', $user->id))
-            ->with(['feed', 'music'])
+            ->with(['feed', 'feed.user', 'music'])
             ->latest()
             ->paginate(10);
     }

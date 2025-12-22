@@ -9,13 +9,14 @@ use App\Features\Feed\Enums\FeedStatusEnum;
 use App\Features\User\Data\UserData;
 use App\Features\Video\Data\VideoData;
 use Spatie\LaravelData\Data;
+use Spatie\LaravelData\Optional;
 
 class FeedData extends Data
 {
     public function __construct(
         public string $id,
         public UserData $user,
-        public VideoData $content,
+        public VideoData|Optional $content,
         public ?string $title,
         public bool $allow_comments,
         public FeedPrivacyEnum $privacy,
