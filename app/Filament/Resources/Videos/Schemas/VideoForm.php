@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Resources\Videos\Schemas;
 
 use App\Features\Music\Models\Music;
-use App\Features\Video\Enums\VideoPrivacyEnum;
+use App\Features\Video\Enums\FeedPrivacyEnum;
 use App\Features\Video\Models\Video;
 use CodeWithDennis\FilamentLucideIcons\Enums\LucideIcon;
 use Filament\Forms\Components\FileUpload;
@@ -52,8 +52,8 @@ class VideoForm
                             ->visible(fn (Get $get): bool => $get('music_id') !== null)
                     ),
                 Select::make('privacy')
-                    ->options(VideoPrivacyEnum::class)
-                    ->default(VideoPrivacyEnum::PublicView)
+                    ->options(FeedPrivacyEnum::class)
+                    ->default(FeedPrivacyEnum::PublicView)
                     ->required(),
                 Toggle::make('allow_comments')
                     ->default(true),

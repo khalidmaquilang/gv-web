@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Features\Video\Data;
 
-use App\Features\Video\Enums\VideoPrivacyEnum;
+use App\Features\Video\Enums\FeedPrivacyEnum;
 use Illuminate\Http\UploadedFile;
 use Spatie\LaravelData\Data;
 
@@ -13,7 +13,7 @@ class VideoUploadData extends Data
     public function __construct(
         public ?string $description = null,
         public bool $allow_comments = false,
-        public ?VideoPrivacyEnum $privacy = null,
+        public ?FeedPrivacyEnum $privacy = null,
         public ?UploadedFile $video = null,
         public ?array $images = null,
         public ?string $music_id = null,
@@ -25,7 +25,7 @@ class VideoUploadData extends Data
         return [
             'description' => ['nullable', 'string'],
             'allow_comments' => ['required', 'boolean'],
-            'privacy' => ['required', 'in:'.implode(',', VideoPrivacyEnum::toArray())],
+            'privacy' => ['required', 'in:'.implode(',', FeedPrivacyEnum::toArray())],
 
             // VIDEO (mutually exclusive with images)
             'video' => [

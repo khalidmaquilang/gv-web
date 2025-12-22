@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Features\Video\Models;
 
+use App\Features\Feed\Models\Feed;
 use App\Features\Music\Models\Music;
-use App\Features\User\Models\User;
-use App\Features\Video\Enums\VideoPrivacyEnum;
-use App\Features\Video\Enums\VideoStatusEnum;
+use App\Features\Video\Enums\FeedStatusEnum;
 use App\Features\Video\Policies\VideoPolicy;
 use App\Features\Webhook\Enums\WebhookEnum;
 use App\Features\Webhook\Models\Interfaces\FfmpegInterface;
@@ -16,43 +15,27 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 /**
  * @property string $id
- * @property string $user_id
  * @property string|null $music_id
- * @property string|null $title
- * @property string|null $description
  * @property string|null $thumbnail
  * @property string|null $video_path
- * @property array<array-key, mixed>|null $images
- * @property bool $allow_comments
- * @property VideoPrivacyEnum $privacy
- * @property VideoStatusEnum $status
- * @property int $views
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read Feed|null $feed
  * @property-read Music|null $music
- * @property-read User $user
  *
  * @method static Builder<static>|Video newModelQuery()
  * @method static Builder<static>|Video newQuery()
- * @method static Builder<static>|Video published()
  * @method static Builder<static>|Video query()
- * @method static Builder<static>|Video whereAllowComments($value)
  * @method static Builder<static>|Video whereCreatedAt($value)
- * @method static Builder<static>|Video whereDescription($value)
  * @method static Builder<static>|Video whereId($value)
- * @method static Builder<static>|Video whereImages($value)
  * @method static Builder<static>|Video whereMusicId($value)
- * @method static Builder<static>|Video wherePrivacy($value)
- * @method static Builder<static>|Video whereStatus($value)
  * @method static Builder<static>|Video whereThumbnail($value)
- * @method static Builder<static>|Video whereTitle($value)
  * @method static Builder<static>|Video whereUpdatedAt($value)
- * @method static Builder<static>|Video whereUserId($value)
  * @method static Builder<static>|Video whereVideoPath($value)
- * @method static Builder<static>|Video whereViews($value)
  *
  * @mixin \Eloquent
  */
@@ -61,16 +44,6 @@ class Video extends Model implements FfmpegInterface
 {
     use HasUuids;
 
-    /**
-     * @var string[]
-     */
-    protected $casts = [
-        'images' => 'array',
-        'allow_comments' => 'boolean',
-        'privacy' => VideoPrivacyEnum::class,
-        'status' => VideoStatusEnum::class,
-    ];
-
     protected static function booted(): void
     {
         static::creating(function (Video $video): void {
@@ -78,16 +51,8 @@ class Video extends Model implements FfmpegInterface
             abort_if($user_id === null, 404);
 
             $video->user_id = $user_id;
-            $video->status = VideoStatusEnum::Processing;
+            $video->status = FeedStatusEnum::Processing;
         });
-    }
-
-    /**
-     * @return BelongsTo<User, $this>
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
     }
 
     /**
@@ -99,12 +64,11 @@ class Video extends Model implements FfmpegInterface
     }
 
     /**
-     * @param  Builder<Video>  $query
-     * @return Builder<Video>
+     * @return MorphOne<Feed, $this>
      */
-    public function scopePublished(Builder $query): Builder
+    public function feed(): MorphOne
     {
-        return $query->whereIn('status', [VideoStatusEnum::Processed, VideoStatusEnum::Approved]);
+        return $this->morphOne(Feed::class, 'content');
     }
 
     public static function updateMediaStatus(string $model_id, WebhookEnum $status, int $duration, string $path, string $thumbnail_path): void
@@ -115,9 +79,14 @@ class Video extends Model implements FfmpegInterface
         }
 
         $video->update([
-            'status' => $status->toVideo(),
             'video_path' => blank($path) ? $video->video_path : $path,
             'thumbnail' => $thumbnail_path,
+        ]);
+
+        /** @var Feed $feed */
+        $feed = $video->feed;
+        $feed->update([
+            'status' => $status->toFeed(),
         ]);
     }
 
