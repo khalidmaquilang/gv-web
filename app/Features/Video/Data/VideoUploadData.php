@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Features\Video\Data;
 
-use App\Features\Video\Enums\FeedPrivacyEnum;
+use App\Features\Feed\Enums\FeedPrivacyEnum;
 use Illuminate\Http\UploadedFile;
 use Spatie\LaravelData\Data;
 
