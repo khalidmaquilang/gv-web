@@ -22,6 +22,11 @@ class GetCommentsAction
 
         return Comment::query()
             ->where('feed_id', $feed_id)
+            ->with('user')
+            ->withCount('reactions')
+            ->withExists(['reactions as is_reacted_by_user' => function (Builder $query) use ($user_id): void {
+                $query->where('user_id', $user_id);
+            }])
             ->whereHas('feed', function (Builder $query) use ($user_id): void {
                 $query->where(function (Builder $query) use ($user_id): void {
                     $query->where(function (Builder $q): void {

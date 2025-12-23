@@ -9,6 +9,7 @@ use App\Features\Feed\Enums\FeedPrivacyEnum;
 use App\Features\Feed\Enums\FeedStatusEnum;
 use App\Features\User\Models\User;
 use App\Features\Video\Policies\FeedPolicy;
+use Binafy\LaravelReaction\Traits\Reactable;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -32,6 +33,9 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Comment> $comments
  * @property-read int|null $comments_count
  * @property-read Feed $content
+ * @property-read bool $is_reacted
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Binafy\LaravelReaction\Models\Reaction> $reactions
+ * @property-read int|null $reactions_count
  * @property-read User $user
  *
  * @method static Builder<static>|Feed newModelQuery()
@@ -56,6 +60,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class Feed extends Model
 {
     use HasUuids;
+    use Reactable;
 
     /**
      * @var string[]

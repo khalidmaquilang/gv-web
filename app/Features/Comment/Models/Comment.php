@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Features\Comment\Models;
 
 use App\Features\Feed\Models\Feed;
+use App\Features\User\Models\User;
+use Binafy\LaravelReaction\Traits\Reactable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,6 +19,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read Feed $feed
+ * @property-read bool $is_reacted
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Binafy\LaravelReaction\Models\Reaction> $reactions
+ * @property-read int|null $reactions_count
+ * @property-read User $user
  *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment newQuery()
@@ -33,6 +39,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Comment extends Model
 {
     use HasUuids;
+    use Reactable;
 
     /**
      * @return BelongsTo<Feed, $this>
@@ -40,5 +47,13 @@ class Comment extends Model
     public function feed(): BelongsTo
     {
         return $this->belongsTo(Feed::class);
+    }
+
+    /**
+     * @return BelongsTo<User, $this>
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

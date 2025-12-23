@@ -11,8 +11,11 @@ use Spatie\LaravelData\Data;
 class CommentData extends Data
 {
     public function __construct(
+        public string $id,
         public UserData $user,
         public string $message,
-        public Carbon $created_at
+        public bool $is_reacted_by_user = false,
+        public int $reactions_count = 0,
+        public ?Carbon $created_at = null
     ) {}
 }

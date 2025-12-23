@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Features\User\Models;
 
+use Binafy\LaravelReaction\Traits\Reactor;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -56,6 +57,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
     use HasFactory;
     use HasUuids;
     use Notifiable;
+    use Reactor;
 
     /**
      * The attributes that are mass assignable.
