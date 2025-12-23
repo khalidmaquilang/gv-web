@@ -6,6 +6,7 @@ namespace App\Features\Video\Actions;
 
 use App\Features\Video\Models\Video;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 
 class GetMyVideosAction
 {
@@ -15,8 +16,8 @@ class GetMyVideosAction
         abort_if($user === null, 404);
 
         return Video::query()
-            ->where('user_id', $user->id)
-            ->with(['music', 'user'])
+            ->whereHas('feed', fn (Builder $query) => $query->where('user_id', $user->id))
+            ->with(['feed', 'feed.user', 'music'])
             ->latest()
             ->paginate(10);
     }

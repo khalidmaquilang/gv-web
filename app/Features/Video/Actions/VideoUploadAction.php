@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Features\Video\Actions;
 
+use App\Features\Feed\Enums\FeedPrivacyEnum;
+use App\Features\Feed\Models\Feed;
 use App\Features\Shared\Actions\FfmpegAction;
 use App\Features\Video\Data\VideoUploadData;
-use App\Features\Video\Enums\VideoPrivacyEnum;
-use App\Features\Video\Enums\VideoStatusEnum;
 use App\Features\Video\Models\Video;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
@@ -22,25 +23,32 @@ class VideoUploadAction
         $path = Video::getVideoPath($user_id).'/'.Str::uuid().'.mp4';
         $path = $this->uploadFile($data->video->getRealPath(), $path);
 
-        $video = Video::create([
-            'user_id' => $user_id,
-            'music_id' => $data->music_id ?? null,
-            'description' => $data->description ?? '',
-            'video_path' => $path,
-            'allow_comments' => $data->allow_comments ?? false,
-            'privacy' => $data->privacy ?? VideoPrivacyEnum::PublicView,
-            'status' => VideoStatusEnum::Processing,
-        ]);
+        DB::transaction(function () use ($data, $path, $user_id): void {
+            $video = Video::create([
+                'music_id' => $data->music_id ?? null,
+                'video_path' => $path,
+            ]);
 
-        app(FfmpegAction::class)
-            ->handle(
-                model_id: $video->id,
-                model_type: Video::class,
-                file_path: $video->video_path,
-                is_video: true,
-                music_path: $video->music->path ?? null,
-                user_id: $user_id,
-            );
+            $feed = new Feed([
+                'user_id' => $user_id,
+                'title' => $data->description ?? '',
+                'allow_comments' => $data->allow_comments ?? false,
+                'privacy' => $data->privacy ?? FeedPrivacyEnum::PublicView,
+            ]);
+
+            $feed->content()->associate($video);
+            $feed->save();
+
+            app(FfmpegAction::class)
+                ->handle(
+                    model_id: $video->id,
+                    model_type: Video::class,
+                    file_path: $video->video_path,
+                    is_video: true,
+                    music_path: $video->music->path ?? null,
+                    user_id: $user_id,
+                );
+        });
     }
 
     protected function uploadFile(string $input_path, string $output_path): string

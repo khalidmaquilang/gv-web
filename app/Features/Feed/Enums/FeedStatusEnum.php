@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Features\Video\Enums;
+namespace App\Features\Feed\Enums;
 
 use App\Features\Shared\Enums\Traits\EnumArrayTrait;
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasLabel;
 
-enum VideoStatusEnum: string implements HasColor, HasLabel
+enum FeedStatusEnum: string implements HasColor, HasLabel
 {
     use EnumArrayTrait;
 

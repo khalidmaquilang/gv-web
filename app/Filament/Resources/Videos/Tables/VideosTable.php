@@ -20,10 +20,10 @@ class VideosTable
     {
         return $table
             ->columns([
-                TextColumn::make('user.name'),
+                TextColumn::make('feed.user.name'),
                 TextColumn::make('music.name'),
-                TextColumn::make('title'),
-                TextColumn::make('description')
+                TextColumn::make('feed.title')
+                    ->label('Description')
                     ->lineClamp(2)
                     ->wrap(),
                 TextColumn::make('video_path')
@@ -37,11 +37,15 @@ class VideosTable
                             ->mediaType(MediaAction::TYPE_VIDEO)
                             ->media(fn (Video $record) => Storage::url($record->video_path))
                     ),
-                TextColumn::make('privacy')
+                TextColumn::make('feed.privacy')
+                    ->label('Privacy')
                     ->badge(),
-                TextColumn::make('status')
+                TextColumn::make('feed.status')
+                    ->label('Status')
                     ->badge(),
-                TextColumn::make('views'),
+                TextColumn::make('feed.views')
+                    ->label('Views')
+                    ->numeric(),
                 TextColumn::make('created_at')
                     ->dateTime(),
             ])
