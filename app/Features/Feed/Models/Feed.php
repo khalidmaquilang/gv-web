@@ -9,6 +9,7 @@ use App\Features\Feed\Enums\FeedPrivacyEnum;
 use App\Features\Feed\Enums\FeedStatusEnum;
 use App\Features\User\Models\User;
 use App\Features\Video\Policies\FeedPolicy;
+use Binafy\LaravelReaction\Contracts\HasReaction;
 use Binafy\LaravelReaction\Traits\Reactable;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Builder;
@@ -30,25 +31,28 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property int $views
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Comment> $comments
+ * @property-read int|null $reactions_count
  * @property-read int|null $comments_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Comment> $comments
  * @property-read Feed $content
  * @property-read bool $is_reacted
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Binafy\LaravelReaction\Models\Reaction> $reactions
- * @property-read int|null $reactions_count
  * @property-read User $user
  *
  * @method static Builder<static>|Feed accessible(string $user_id)
+ * @method static Builder<static>|Feed feedAlgorithm()
  * @method static Builder<static>|Feed newModelQuery()
  * @method static Builder<static>|Feed newQuery()
  * @method static Builder<static>|Feed published()
  * @method static Builder<static>|Feed query()
  * @method static Builder<static>|Feed whereAllowComments($value)
+ * @method static Builder<static>|Feed whereCommentsCount($value)
  * @method static Builder<static>|Feed whereContentId($value)
  * @method static Builder<static>|Feed whereContentType($value)
  * @method static Builder<static>|Feed whereCreatedAt($value)
  * @method static Builder<static>|Feed whereId($value)
  * @method static Builder<static>|Feed wherePrivacy($value)
+ * @method static Builder<static>|Feed whereReactionsCount($value)
  * @method static Builder<static>|Feed whereStatus($value)
  * @method static Builder<static>|Feed whereTitle($value)
  * @method static Builder<static>|Feed whereUpdatedAt($value)
@@ -58,7 +62,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @mixin \Eloquent
  */
 #[UsePolicy(FeedPolicy::class)]
-class Feed extends Model
+class Feed extends Model implements HasReaction
 {
     use HasUuids;
     use Reactable;
@@ -108,8 +112,8 @@ class Feed extends Model
     }
 
     /**
-     * @param  Builder<Feed,>  $query
-     * @return Builder<Feed,>
+     * @param  Builder<Feed>  $query
+     * @return Builder<Feed>
      */
     public function scopePublished(Builder $query): Builder
     {
@@ -126,5 +130,25 @@ class Feed extends Model
                 })
                     ->orWhere('user_id', $user_id);
             });
+    }
+
+    /**
+     * @param  Builder<Feed>  $query
+     * @return Builder<Feed>
+     */
+    public function scopeFeedAlgorithm(Builder $query): Builder
+    {
+        // Comments are worth more than Likes (usually 2x or 3x)
+        $comment_weight = 3;
+        $reaction_weight = 1;
+
+        $query->where('created_at', '>=', now()->subDays(14));
+
+        return $query
+            ->withCount(['reactions', 'comments'])
+            ->orderByRaw(
+                sprintf('(reactions_count * %d + comments_count * %d) DESC', $reaction_weight, $comment_weight)
+            )
+            ->orderBy('created_at', 'DESC');
     }
 }

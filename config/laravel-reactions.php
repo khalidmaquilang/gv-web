@@ -10,7 +10,7 @@ return [
         /*
        * User model.
        */
-        'model' => 'App\Models\User',
+        'model' => 'App\Features\User\Models\User',
 
         /*
          * Foreign Key column name.
@@ -32,6 +32,6 @@ return [
          *
          * When you are using ulid or uuid, you need to add related traits into the models.
          */
-        'foreign_key_type' => 'id', // uuid, ulid, id
+        'foreign_key_type' => 'uuid', // uuid, ulid, id
     ],
 ];

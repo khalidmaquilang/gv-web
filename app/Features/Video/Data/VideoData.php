@@ -14,7 +14,7 @@ class VideoData extends Data
 {
     public function __construct(
         public string|Optional $thumbnail,
-        public FeedData $feed,
+        public FeedData|Optional $feed,
         public MusicData|Optional $music,
         public string|Optional $video_path,
     ) {

@@ -17,9 +17,9 @@ class ReactFeedAction
             ->firstOrFail();
 
         if ($feed->isReacted()) {
-            $feed->reaction(LaravelReactionTypeEnum::REACTION_LOVE);
-        } else {
             $feed->removeReaction(LaravelReactionTypeEnum::REACTION_LOVE);
+        } else {
+            $feed->reaction(LaravelReactionTypeEnum::REACTION_LOVE);
         }
     }
 }

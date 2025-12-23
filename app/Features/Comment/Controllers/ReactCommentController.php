@@ -19,9 +19,9 @@ class ReactCommentController extends Controller
         $comment = Comment::findOrFail($comment_id);
 
         if ($comment->isReacted()) {
-            $comment->reaction(LaravelReactionTypeEnum::REACTION_LOVE);
-        } else {
             $comment->removeReaction(LaravelReactionTypeEnum::REACTION_LOVE);
+        } else {
+            $comment->reaction(LaravelReactionTypeEnum::REACTION_LOVE);
         }
 
         return response()->json(['message' => 'success']);
