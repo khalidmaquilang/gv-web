@@ -38,6 +38,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property-read int|null $reactions_count
  * @property-read User $user
  *
+ * @method static Builder<static>|Feed accessible(string $user_id)
  * @method static Builder<static>|Feed newModelQuery()
  * @method static Builder<static>|Feed newQuery()
  * @method static Builder<static>|Feed published()
@@ -113,5 +114,17 @@ class Feed extends Model
     public function scopePublished(Builder $query): Builder
     {
         return $query->whereIn('status', [FeedStatusEnum::Processed, FeedStatusEnum::Approved]);
+    }
+
+    public function scopeAccessible(Builder $query, string $user_id): Builder
+    {
+        return $query
+            ->where(function (Builder $query) use ($user_id): void {
+                $query->where(function (Builder $q): void {
+                    $q->where('privacy', FeedPrivacyEnum::PublicView)
+                        ->whereIn('status', [FeedStatusEnum::Processed, FeedStatusEnum::Approved]);
+                })
+                    ->orWhere('user_id', $user_id);
+            });
     }
 }

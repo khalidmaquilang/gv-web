@@ -9,5 +9,5 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::get('/feeds/{feed_id}/comments', CommentsController::class);
     Route::post('/feeds/{feed_id}/comments', PostVideoCommentController::class);
 
-    Route::post('/comments/{comment_id}', ReactCommentController::class);
+    Route::post('/comments/{comment_id}/react', ReactCommentController::class);
 });

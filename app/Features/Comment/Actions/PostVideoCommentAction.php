@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace App\Features\Comment\Actions;
 
 use App\Features\Comment\Data\PostVideoCommentData;
-use App\Features\Feed\Enums\FeedPrivacyEnum;
 use App\Features\Feed\Models\Feed;
-use Illuminate\Database\Eloquent\Builder;
 
 class PostVideoCommentAction
 {
@@ -19,13 +17,8 @@ class PostVideoCommentAction
 
         $feed = Feed::query()
             ->where('id', $feed_id)
-            ->where(function (Builder $query) use ($user_id): void {
-                $query->where(function (Builder $q): void {
-                    $q->where('privacy', FeedPrivacyEnum::PublicView)
-                        ->where('allow_comments', true);
-                })
-                    ->orWhere('user_id', $user_id);
-            })
+            ->where('allow_comments', true)
+            ->accessible()
             ->firstOrFail();
 
         $feed->comments()->create([

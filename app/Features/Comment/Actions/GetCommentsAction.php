@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Features\Comment\Actions;
 
 use App\Features\Comment\Models\Comment;
-use App\Features\Feed\Enums\FeedPrivacyEnum;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -28,13 +27,7 @@ class GetCommentsAction
                 $query->where('user_id', $user_id);
             }])
             ->whereHas('feed', function (Builder $query) use ($user_id): void {
-                $query->where(function (Builder $query) use ($user_id): void {
-                    $query->where(function (Builder $q): void {
-                        $q->where('privacy', FeedPrivacyEnum::PublicView)
-                            ->where('allow_comments', true);
-                    })
-                        ->orWhere('user_id', $user_id);
-                });
+                $query->accessible($user_id);
             })
             ->latest()
             ->paginate(10);
