@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Features\Feed\Models;
 
+use App\Features\Comment\Models\Comment;
 use App\Features\Feed\Enums\FeedPrivacyEnum;
 use App\Features\Feed\Enums\FeedStatusEnum;
 use App\Features\User\Models\User;
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
@@ -27,6 +29,8 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property int $views
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Comment> $comments
+ * @property-read int|null $comments_count
  * @property-read Feed $content
  * @property-read User $user
  *
@@ -87,6 +91,14 @@ class Feed extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return HasMany<Comment, $this>
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
     }
 
     /**
