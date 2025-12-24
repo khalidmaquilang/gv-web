@@ -18,7 +18,7 @@ class PostVideoCommentAction
         $feed = Feed::query()
             ->where('id', $feed_id)
             ->where('allow_comments', true)
-            ->accessible()
+            ->accessible($user_id)
             ->firstOrFail();
 
         $feed->comments()->create([

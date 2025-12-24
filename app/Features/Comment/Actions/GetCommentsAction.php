@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace App\Features\Comment\Actions;
 
 use App\Features\Comment\Models\Comment;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Database\Eloquent\Builder;
 
 class GetCommentsAction
 {
     /**
-     * @return LengthAwarePaginator<Comment>
+     * @return CursorPaginator<Comment>
      */
-    public function handle(string $feed_id): LengthAwarePaginator
+    public function handle(string $feed_id): CursorPaginator
     {
         /** @var ?string $user_id */
         $user_id = auth()->id();
@@ -30,6 +30,6 @@ class GetCommentsAction
                 $query->accessible($user_id);
             })
             ->latest()
-            ->paginate(10);
+            ->cursorPaginate(10);
     }
 }

@@ -16,6 +16,11 @@ class CommentData extends Data
         public string $message,
         public bool $is_reacted_by_user = false,
         public int $reactions_count = 0,
-        public ?Carbon $created_at = null
-    ) {}
+        public ?Carbon $created_at = null,
+        public ?string $formatted_created_at = null,
+    ) {
+        if ($created_at instanceof Carbon) {
+            $this->formatted_created_at = $created_at->diffForHumans();
+        }
+    }
 }
