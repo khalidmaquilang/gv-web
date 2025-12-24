@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b5755431e420246ee906476512d2db7a",
+    "content-hash": "6df4d915187c190e3ae3587f0c66c66d",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -276,6 +276,85 @@
                 "source": "https://github.com/bangnokia/laravel-bunny-storage/tree/v2.0.3"
             },
             "time": "2025-04-09T08:51:54+00:00"
+        },
+        {
+            "name": "binafy/laravel-reactions",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/binafy/laravel-reactions.git",
+                "reference": "cab7bf107a1900d03a96aec31b664485e8e01d60"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/binafy/laravel-reactions/zipball/cab7bf107a1900d03a96aec31b664485e8e01d60",
+                "reference": "cab7bf107a1900d03a96aec31b664485e8e01d60",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^10.0|^11.0|^12.0",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^8.0|^9.0|^10.0",
+                "pestphp/pest-plugin-laravel": "^1.4.0|^2.0.0|^3.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Binafy\\LaravelReaction\\Providers\\LaravelReactionServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Binafy\\LaravelReaction\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Milwad Khosravi",
+                    "email": "milwad.dev@gmail.com",
+                    "homepage": "https://github.com/milwad-dev",
+                    "role": "author"
+                },
+                {
+                    "name": "Binafy",
+                    "homepage": "https://github.com/binafy",
+                    "role": "owner"
+                }
+            ],
+            "description": "Laravel Reactions is a simple and flexible package that allows you to add reaction functionality to any Eloquent model",
+            "homepage": "https://github.com/binafy/laravel-reactions",
+            "keywords": [
+                "binafy",
+                "clap",
+                "eloquent",
+                "fun developer",
+                "laravel",
+                "laravel library",
+                "laravel reaction eloquent",
+                "laravel reactions",
+                "laravel reactions github",
+                "laravel reactions package",
+                "laravel-reactions",
+                "like",
+                "love",
+                "milwad",
+                "milwad khosravi",
+                "reaction",
+                "reactions"
+            ],
+            "support": {
+                "issues": "https://github.com/binafy/laravel-reactions/issues",
+                "source": "https://github.com/binafy/laravel-reactions/tree/v1.0.0"
+            },
+            "time": "2025-07-17T10:56:04+00:00"
         },
         {
             "name": "blade-ui-kit/blade-heroicons",

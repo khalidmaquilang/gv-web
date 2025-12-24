@@ -9,6 +9,7 @@
         "php": "^8.2",
         "aws/aws-sdk-php": "^3.368",
         "bangnokia/laravel-bunny-storage": "^2.0",
+        "binafy/laravel-reactions": "^1.0",
         "codewithdennis/filament-lucide-icons": "^4.0",
         "filament/filament": "^4.0",
         "hugomyb/filament-media-action": "^4.1",
