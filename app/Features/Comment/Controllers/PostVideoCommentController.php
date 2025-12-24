@@ -15,8 +15,11 @@ class PostVideoCommentController extends Controller
 
     public function __invoke(PostVideoCommentData $data, string $feed_id): JsonResponse
     {
-        $this->post_video_comment_action->handle($data, $feed_id);
+        $id = $this->post_video_comment_action->handle($data, $feed_id);
 
-        return response()->json(['message' => 'success']);
+        return response()->json([
+            'message' => 'success',
+            'id' => $id,
+        ]);
     }
 }
