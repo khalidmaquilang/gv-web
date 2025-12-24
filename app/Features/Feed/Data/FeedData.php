@@ -9,6 +9,7 @@ use App\Features\Feed\Enums\FeedStatusEnum;
 use App\Features\User\Data\UserData;
 use App\Features\Video\Data\VideoData;
 use Carbon\Carbon;
+use Illuminate\Support\Number;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Optional;
 
@@ -25,6 +26,11 @@ class FeedData extends Data
         public int $views,
         public bool $is_reacted_by_user = false,
         public int $reactions_count = 0,
+        public ?string $formatted_views = null,
+        public ?string $formatted_reactions_count = null,
         public ?Carbon $created_at = null,
-    ) {}
+    ) {
+        $this->formatted_reactions_count = Number::abbreviate($this->reactions_count);
+        $this->formatted_views = Number::abbreviate($this->views);
+    }
 }
