@@ -4,22 +4,21 @@ declare(strict_types=1);
 
 namespace App\Features\User\Controllers;
 
+use App\Features\User\Actions\FollowUserAction;
 use App\Features\User\Actions\GetUserDataAction;
-use App\Features\User\Actions\UploadProfileImageAction;
-use App\Features\User\Data\UploadProfileImageData;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 
-class UploadProfileImageController extends Controller
+class FollowUserController extends Controller
 {
     public function __construct(
-        protected UploadProfileImageAction $upload_profile_image_action,
+        protected FollowUserAction $follow_user_action,
         protected GetUserDataAction $get_user_data_action
     ) {}
 
-    public function __invoke(UploadProfileImageData $data): JsonResponse
+    public function __invoke(string $userId): JsonResponse
     {
-        $user = $this->upload_profile_image_action->handle($data->image);
+        $user = $this->follow_user_action->handle($userId);
 
         return response()->json($this->get_user_data_action->handle($user));
     }

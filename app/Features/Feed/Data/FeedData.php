@@ -17,7 +17,7 @@ class FeedData extends Data
 {
     public function __construct(
         public string $id,
-        public UserData $user,
+        public UserData|Optional $user,
         public VideoData|Optional $content,
         public ?string $title,
         public bool $allow_comments,
