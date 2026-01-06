@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Features\Webhook\Controllers;
 
 use App\Features\Webhook\Data\FfmpegData;
+use App\Features\Webhook\Enums\WebhookEnum;
 use App\Features\Webhook\Models\Interfaces\FfmpegInterface;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Model;
@@ -19,6 +20,12 @@ class WebhookFfmpegController extends Controller
         $model = app($request->model_type);
         if (! $model instanceof FfmpegInterface) {
             Log::error('This model does not have FfmpegInterface', $request->toArray());
+
+            return response()->json(['message' => 'error'], 400);
+        }
+
+        if ($request->status === WebhookEnum::Error) {
+            Log::error($request->message, $request->toArray());
 
             return response()->json(['message' => 'error'], 400);
         }

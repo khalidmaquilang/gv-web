@@ -14,6 +14,14 @@ class UserData extends Data
         public string $name,
         public string $username,
         public ?string $avatar,
+        public bool $is_following = false,
+        public int $followers_count = 0,
+        public int $following_count = 0,
+        public int $likes_count = 0,
+        public ?string $bio = null,
+        public ?string $formatted_followers_count = null,
+        public ?string $formatted_following_count = null,
+        public ?string $formatted_likes_count = null,
     ) {
         if ($avatar) {
             $this->avatar = Storage::url($avatar);
