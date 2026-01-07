@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Features\Video\Policies;
+namespace App\Features\Feed\Policies;
 
 use App\Features\Feed\Enums\FeedPrivacyEnum;
 use App\Features\User\Models\User;
