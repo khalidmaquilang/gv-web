@@ -33,19 +33,17 @@ final class CreateLiveActionTest extends TestCase
         $this->actingAs($this->user);
 
         $action = new CreateLiveAction;
-        $liveId = $action->handle($data);
+        $live = $action->handle($data);
 
         // Assert Live was created
-        $this->assertIsString($liveId);
-        $live = Live::find($liveId);
-        $this->assertNotNull($live);
+        $this->assertInstanceOf(Live::class, $live);
         $this->assertNotEmpty($live->stream_key);
         $this->assertNull($live->started_at);
         $this->assertNull($live->ended_at);
 
         // Assert Feed was created and linked
         $feed = Feed::where('content_type', Live::class)
-            ->where('content_id', $liveId)
+            ->where('content_id', $live->id)
             ->first();
 
         $this->assertNotNull($feed);
@@ -57,7 +55,7 @@ final class CreateLiveActionTest extends TestCase
 
         // Assert polymorphic relationship
         $this->assertInstanceOf(Live::class, $feed->content);
-        $this->assertEquals($liveId, $feed->content->id);
+        $this->assertEquals($live->id, $feed->content->id);
         $this->assertInstanceOf(Feed::class, $live->feed);
         $this->assertEquals($feed->id, $live->feed->id);
     }
@@ -69,10 +67,10 @@ final class CreateLiveActionTest extends TestCase
         $this->actingAs($this->user);
 
         $action = new CreateLiveAction;
-        $liveId = $action->handle($data);
+        $live = $action->handle($data);
 
         $feed = Feed::where('content_type', Live::class)
-            ->where('content_id', $liveId)
+            ->where('content_id', $live->id)
             ->first();
 
         $this->assertEquals('', $feed->title);
@@ -85,11 +83,8 @@ final class CreateLiveActionTest extends TestCase
         $this->actingAs($this->user);
 
         $action = new CreateLiveAction;
-        $liveId1 = $action->handle($data);
-        $liveId2 = $action->handle($data);
-
-        $live1 = Live::find($liveId1);
-        $live2 = Live::find($liveId2);
+        $live1 = $action->handle($data);
+        $live2 = $action->handle($data);
 
         $this->assertNotEquals($live1->stream_key, $live2->stream_key);
     }
@@ -111,9 +106,9 @@ final class CreateLiveActionTest extends TestCase
         $this->actingAs($this->user);
 
         $action = new CreateLiveAction;
-        $liveId = $action->handle($data);
+        $live = $action->handle($data);
 
-        $feed = Feed::where('content_id', $liveId)->first();
+        $feed = Feed::where('content_id', $live->id)->first();
 
         // Verify all feed attributes are set correctly
         $this->assertEquals($this->user->id, $feed->user_id);
@@ -158,7 +153,7 @@ final class CreateLiveActionTest extends TestCase
         // Create a new live stream
         $data = new CreateLiveData(title: 'New Live Stream');
         $action = new CreateLiveAction;
-        $newLiveId = $action->handle($data);
+        $newLive = $action->handle($data);
 
         // Refresh the old live streams
         $firstLive->refresh();
@@ -169,7 +164,6 @@ final class CreateLiveActionTest extends TestCase
         $this->assertNotNull($secondLive->ended_at);
 
         // Assert new stream was created and is ongoing
-        $newLive = Live::find($newLiveId);
         $this->assertNotNull($newLive);
         $this->assertNull($newLive->ended_at);
     }

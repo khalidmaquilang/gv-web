@@ -15,10 +15,11 @@ class CreateLiveController extends Controller
 
     public function __invoke(CreateLiveData $request): JsonResponse
     {
-        $id = $this->create_live_action->handle($request);
+        $live = $this->create_live_action->handle($request);
 
         return response()->json([
-            'id' => $id,
+            'id' => $live->id,
+            'stream_key' => $live->stream_key,
             'message' => 'success',
         ]);
     }
