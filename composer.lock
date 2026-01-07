@@ -2422,16 +2422,16 @@
         },
         {
             "name": "hugomyb/filament-media-action",
-            "version": "v4.1.0.1",
+            "version": "v4.1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hugomyb/filament-media-action.git",
-                "reference": "d722c890d82c319c9091de04f39d84891f1056b2"
+                "reference": "a18d1f4953b658c000589bc4f93b89b2c2b6217e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hugomyb/filament-media-action/zipball/d722c890d82c319c9091de04f39d84891f1056b2",
-                "reference": "d722c890d82c319c9091de04f39d84891f1056b2",
+                "url": "https://api.github.com/repos/hugomyb/filament-media-action/zipball/a18d1f4953b658c000589bc4f93b89b2c2b6217e",
+                "reference": "a18d1f4953b658c000589bc4f93b89b2c2b6217e",
                 "shasum": ""
             },
             "require": {
@@ -2491,7 +2491,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-11-17T21:05:09+00:00"
+            "time": "2026-01-05T10:50:14+00:00"
         },
         {
             "name": "kirschbaum-development/eloquent-power-joins",
