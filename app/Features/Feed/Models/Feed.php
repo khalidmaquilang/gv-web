@@ -31,12 +31,12 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property int $views
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read int|null $reactions_count
- * @property-read int|null $comments_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Comment> $comments
+ * @property-read int|null $comments_count
  * @property-read Feed $content
  * @property-read bool $is_reacted
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Binafy\LaravelReaction\Models\Reaction> $reactions
+ * @property-read int|null $reactions_count
  * @property-read User $user
  *
  * @method static Builder<static>|Feed accessible(string $user_id)
@@ -46,13 +46,11 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @method static Builder<static>|Feed published()
  * @method static Builder<static>|Feed query()
  * @method static Builder<static>|Feed whereAllowComments($value)
- * @method static Builder<static>|Feed whereCommentsCount($value)
  * @method static Builder<static>|Feed whereContentId($value)
  * @method static Builder<static>|Feed whereContentType($value)
  * @method static Builder<static>|Feed whereCreatedAt($value)
  * @method static Builder<static>|Feed whereId($value)
  * @method static Builder<static>|Feed wherePrivacy($value)
- * @method static Builder<static>|Feed whereReactionsCount($value)
  * @method static Builder<static>|Feed whereStatus($value)
  * @method static Builder<static>|Feed whereTitle($value)
  * @method static Builder<static>|Feed whereUpdatedAt($value)
