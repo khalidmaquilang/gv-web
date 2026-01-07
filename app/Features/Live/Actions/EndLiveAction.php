@@ -16,6 +16,8 @@ class EndLiveAction
 
         $live = Live::query()
             ->where('id', $live_id)
+            ->whereNotNull('started_at')
+            ->whereNull('ended_at')
             ->whereHas('feed', function (Builder $query) use ($user_id): void {
                 $query->where('user_id', $user_id);
             })

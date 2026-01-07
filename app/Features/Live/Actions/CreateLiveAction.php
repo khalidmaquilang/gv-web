@@ -20,6 +20,17 @@ class CreateLiveAction
         abort_if($user_id === null, 404);
 
         return DB::transaction(function () use ($data, $user_id): string {
+            // End all ongoing live streams for this user
+            Live::query()
+                ->whereNull('ended_at')
+                ->whereHas('feed', function ($query) use ($user_id): void {
+                    $query->where('user_id', $user_id);
+                })
+                ->update([
+                    'ended_at' => now(),
+                ]);
+
+            // Create new live stream
             $live = Live::create([
                 'stream_key' => Str::random(),
             ]);

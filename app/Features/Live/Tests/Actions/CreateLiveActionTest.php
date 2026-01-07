@@ -122,4 +122,85 @@ final class CreateLiveActionTest extends TestCase
         $this->assertEquals(FeedStatusEnum::Approved->value, $feed->status->value);
         $this->assertEquals(0, $feed->views);
     }
+
+    public function test_it_ends_ongoing_live_streams_before_creating_new_one(): void
+    {
+        $this->actingAs($this->user);
+
+        // Create first ongoing live stream
+        $firstLive = Live::create(['stream_key' => 'first-key']);
+        $firstFeed = new Feed([
+            'user_id' => $this->user->id,
+            'title' => 'First Live Stream',
+            'allow_comments' => true,
+            'privacy' => FeedPrivacyEnum::PublicView,
+            'status' => FeedStatusEnum::Approved,
+        ]);
+        $firstFeed->content()->associate($firstLive);
+        $firstFeed->saveQuietly();
+
+        // Create second ongoing live stream
+        $secondLive = Live::create(['stream_key' => 'second-key']);
+        $secondFeed = new Feed([
+            'user_id' => $this->user->id,
+            'title' => 'Second Live Stream',
+            'allow_comments' => true,
+            'privacy' => FeedPrivacyEnum::PublicView,
+            'status' => FeedStatusEnum::Approved,
+        ]);
+        $secondFeed->content()->associate($secondLive);
+        $secondFeed->saveQuietly();
+
+        // Verify both don't have ended_at
+        $this->assertNull($firstLive->ended_at);
+        $this->assertNull($secondLive->ended_at);
+
+        // Create a new live stream
+        $data = new CreateLiveData(title: 'New Live Stream');
+        $action = new CreateLiveAction;
+        $newLiveId = $action->handle($data);
+
+        // Refresh the old live streams
+        $firstLive->refresh();
+        $secondLive->refresh();
+
+        // Assert old streams were ended
+        $this->assertNotNull($firstLive->ended_at);
+        $this->assertNotNull($secondLive->ended_at);
+
+        // Assert new stream was created and is ongoing
+        $newLive = Live::find($newLiveId);
+        $this->assertNotNull($newLive);
+        $this->assertNull($newLive->ended_at);
+    }
+
+    public function test_it_does_not_end_other_users_ongoing_live_streams(): void
+    {
+        $otherUser = User::factory()->create();
+
+        // Create ongoing live stream for other user
+        $otherLive = Live::create(['stream_key' => 'other-key']);
+        $otherFeed = new Feed([
+            'user_id' => $otherUser->id,
+            'title' => 'Other User Stream',
+            'allow_comments' => true,
+            'privacy' => FeedPrivacyEnum::PublicView,
+            'status' => FeedStatusEnum::Approved,
+        ]);
+        $otherFeed->content()->associate($otherLive);
+        $otherFeed->saveQuietly();
+
+        $this->actingAs($this->user);
+
+        // Create new live stream for current user
+        $data = new CreateLiveData(title: 'My New Stream');
+        $action = new CreateLiveAction;
+        $action->handle($data);
+
+        // Refresh other user's live stream
+        $otherLive->refresh();
+
+        // Assert other user's stream was NOT ended
+        $this->assertNull($otherLive->ended_at);
+    }
 }

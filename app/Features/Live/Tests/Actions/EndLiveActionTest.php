@@ -31,8 +31,11 @@ final class EndLiveActionTest extends TestCase
 
     public function test_it_ends_a_live_stream_successfully(): void
     {
-        // Create a live stream
-        $live = Live::create(['stream_key' => 'test-key']);
+        // Create a live stream with started_at
+        $live = Live::create([
+            'stream_key' => 'test-key',
+            'started_at' => now()->subMinutes(5),
+        ]);
         $feed = new Feed([
             'user_id' => $this->user->id,
             'title' => 'Test Stream',
@@ -59,7 +62,10 @@ final class EndLiveActionTest extends TestCase
         $this->expectException(ModelNotFoundException::class);
 
         // Create a live stream owned by other user
-        $live = Live::create(['stream_key' => 'test-key']);
+        $live = Live::create([
+            'stream_key' => 'test-key',
+            'started_at' => now()->subMinutes(5),
+        ]);
         $feed = new Feed([
             'user_id' => $this->otherUser->id,
             'title' => 'Other User Stream',
@@ -90,7 +96,10 @@ final class EndLiveActionTest extends TestCase
     {
         $this->expectException(\Exception::class);
 
-        $live = Live::create(['stream_key' => 'test-key']);
+        $live = Live::create([
+            'stream_key' => 'test-key',
+            'started_at' => now()->subMinutes(5),
+        ]);
         $feed = new Feed([
             'user_id' => $this->user->id,
             'title' => 'Test Stream',
@@ -105,11 +114,14 @@ final class EndLiveActionTest extends TestCase
         $action->handle($live->id);
     }
 
-    public function test_it_can_end_an_already_ended_live_stream(): void
+    public function test_it_fails_when_trying_to_end_already_ended_live_stream(): void
     {
+        $this->expectException(ModelNotFoundException::class);
+
         $live = Live::create([
             'stream_key' => 'test-key',
-            'ended_at' => now()->subHour(),
+            'started_at' => now()->subHour(),
+            'ended_at' => now()->subMinutes(30),
         ]);
         $feed = new Feed([
             'user_id' => $this->user->id,
@@ -123,15 +135,8 @@ final class EndLiveActionTest extends TestCase
 
         $this->actingAs($this->user);
 
-        $oldEndedAt = $live->ended_at;
-
         $action = new EndLiveAction;
         $action->handle($live->id);
-
-        $live->refresh();
-
-        $this->assertNotEquals($oldEndedAt, $live->ended_at);
-        $this->assertGreaterThan($oldEndedAt, $live->ended_at);
     }
 
     public function test_it_validates_ownership_through_feed_relationship(): void
@@ -139,7 +144,32 @@ final class EndLiveActionTest extends TestCase
         $this->expectException(ModelNotFoundException::class);
 
         // Create live without feed (orphaned)
-        $live = Live::create(['stream_key' => 'orphaned-key']);
+        $live = Live::create([
+            'stream_key' => 'orphaned-key',
+            'started_at' => now()->subMinutes(5),
+        ]);
+
+        $this->actingAs($this->user);
+
+        $action = new EndLiveAction;
+        $action->handle($live->id);
+    }
+
+    public function test_it_fails_when_trying_to_end_not_started_live_stream(): void
+    {
+        $this->expectException(ModelNotFoundException::class);
+
+        // Create live stream without started_at
+        $live = Live::create(['stream_key' => 'not-started-key']);
+        $feed = new Feed([
+            'user_id' => $this->user->id,
+            'title' => 'Not Started Stream',
+            'allow_comments' => true,
+            'privacy' => FeedPrivacyEnum::PublicView,
+            'status' => FeedStatusEnum::Approved,
+        ]);
+        $feed->content()->associate($live);
+        $feed->saveQuietly();
 
         $this->actingAs($this->user);
 
