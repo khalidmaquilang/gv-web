@@ -8,7 +8,6 @@ use App\Features\Feed\Models\Feed;
 use App\Features\Live\Models\Live;
 use App\Features\Video\Models\Video;
 use Illuminate\Contracts\Pagination\CursorPaginator;
-use Illuminate\Database\Eloquent\Builder;
 
 class GetFeedsAction
 {
@@ -19,21 +18,21 @@ class GetFeedsAction
             ->with(['user', 'content'])
             ->accessible($user_id)
             ->where('user_id', '<>', $user_id)
-            ->when($only_followed, function (Builder $query) use ($user_id): void {
-                $query->whereIn('user_id', function (Builder $query) use ($user_id): void {
+            ->when($only_followed, function ($query) use ($user_id): void {
+                $query->whereIn('user_id', function ($query) use ($user_id): void {
                     $query->select('following_id')
                         ->from('followers')
                         ->where('follower_id', $user_id);
                 });
             })
-            ->whereHasMorph('content', [Video::class, Live::class], function (Builder $query, string $type): void {
+            ->whereHasMorph('content', [Video::class, Live::class], function ($query, string $type): void {
                 if ($type === Live::class) {
                     $query->whereNull('ended_at');
                 }
             })
             ->feedAlgorithm()
             ->withCount('reactions')
-            ->withExists(['reactions as is_reacted_by_user' => function (Builder $query) use ($user_id): void {
+            ->withExists(['reactions as is_reacted_by_user' => function ($query) use ($user_id): void {
                 $query->where('user_id', $user_id);
             }])
             ->cursorPaginate(10);
