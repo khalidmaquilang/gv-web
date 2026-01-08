@@ -16,7 +16,7 @@ class GetLiveFeedsAction
         return Feed::query()
             ->with(['user', 'content'])
             ->where('content_type', Live::class)
-            ->whereHas('content', fn (Builder $query) => $query->whereNotNull('ended_at'))
+            ->whereHas('content', fn (Builder $query) => $query->whereNull('ended_at'))
             ->where('user_id', '<>', $user_id)
             ->accessible($user_id)
             ->latest()
