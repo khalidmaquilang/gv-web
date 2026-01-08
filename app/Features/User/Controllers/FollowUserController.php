@@ -16,9 +16,9 @@ class FollowUserController extends Controller
         protected GetUserDataAction $get_user_data_action
     ) {}
 
-    public function __invoke(string $userId): JsonResponse
+    public function __invoke(string $user_id): JsonResponse
     {
-        $user = $this->follow_user_action->handle($userId);
+        $user = $this->follow_user_action->handle($user_id);
 
         return response()->json($this->get_user_data_action->handle($user));
     }
