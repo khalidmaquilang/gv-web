@@ -40,14 +40,16 @@ class FeedData extends Data
 
     public static function fromModel(Feed $feed): self
     {
+        $is_loaded = $feed->relationLoaded('content');
+
         return new self(
             id: $feed->id,
             user: UserData::from($feed->user),
 
             // Manual Polymorphic Logic
             content: match ($feed->content_type) {
-                Live::class => LiveData::from($feed->content),
-                Video::class => VideoData::from($feed->content),
+                Live::class => $is_loaded ? LiveData::from($feed->content) : Optional::create(),
+                Video::class => $is_loaded ? VideoData::from($feed->content) : Optional::create(),
                 default => Optional::create(),
             },
 
