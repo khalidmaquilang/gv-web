@@ -5,6 +5,12 @@
          colors="true"
 >
     <testsuites>
+        <testsuite name="Feed">
+            <directory>app/Features/Feed/Tests</directory>
+        </testsuite>
+        <testsuite name="Live">
+            <directory>app/Features/Live/Tests</directory>
+        </testsuite>
         <testsuite name="Unit">
             <directory>tests/Unit</directory>
         </testsuite>
