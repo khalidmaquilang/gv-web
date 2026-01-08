@@ -29,6 +29,7 @@ class FeedData extends Data
         public FeedStatusEnum $status,
         public int $views,
         public bool $is_reacted_by_user = false,
+        public bool $is_author_followed_by_user = false,
         public int $reactions_count = 0,
         public ?string $formatted_views = null,
         public ?string $formatted_reactions_count = null,
@@ -59,6 +60,7 @@ class FeedData extends Data
             status: $feed->status,
             views: $feed->views,
             is_reacted_by_user: (bool) ($feed->is_reacted_by_user ?? false),
+            is_author_followed_by_user: (bool) ($feed->is_author_followed_by_user ?? false),
             reactions_count: ($feed->reactions_count ?? 0),
             created_at: $feed->created_at,
         );
