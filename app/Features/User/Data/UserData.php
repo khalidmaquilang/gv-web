@@ -19,6 +19,8 @@ class UserData extends Data
         public int $followers_count = 0,
         public int $following_count = 0,
         public int $likes_count = 0,
+        public bool $allow_live = false,
+        public ?string $bio = null,
         public ?string $formatted_followers_count = null,
         public ?string $formatted_following_count = null,
         public ?string $formatted_likes_count = null,

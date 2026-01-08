@@ -34,6 +34,8 @@ class GetUserDataAction
             followers_count: $followersCount,
             following_count: $followingCount,
             likes_count: $likesCount,
+            allow_live: $user->allow_live,
+            bio: $user->bio,
         );
     }
 }
