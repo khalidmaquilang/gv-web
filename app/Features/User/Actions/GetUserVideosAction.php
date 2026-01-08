@@ -17,13 +17,13 @@ class GetUserVideosAction
                 $query
                     ->where('user_id', $userId)
                     ->accessible($view_user_id)
-                    ->with('feed.user', 'music')
+                    ->with('music')
                     ->withCount('reactions')
                     ->withExists(['reactions as is_reacted_by_user' => function ($query) use ($view_user_id): void {
                         $query->where('user_id', $view_user_id);
                     }]);
             })
-            ->with(['feed'])
+            ->with(['feed', 'feed.user'])
             ->latest()
             ->paginate(10);
     }

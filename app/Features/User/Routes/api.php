@@ -15,8 +15,8 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::put('/profile', UpdateProfileController::class)->name('profile.update');
     Route::post('/profile/avatar', UploadProfileImageController::class)->name('profile.avatar');
 
-    Route::get('/users/{userId}', GetUserProfileController::class)->name('users.show');
-    Route::post('/users/{userId}/follow', FollowUserController::class)->name('users.follow');
-    Route::delete('/users/{userId}/follow', UnfollowUserController::class)->name('users.unfollow');
-    Route::get('/users/{userId}/videos', GetUserVideosController::class)->name('users.videos');
+    Route::get('/users/{user_id}', GetUserProfileController::class)->name('users.show');
+    Route::post('/users/{user_id}/follow', FollowUserController::class)->name('users.follow');
+    Route::delete('/users/{user_id}/follow', UnfollowUserController::class)->name('users.unfollow');
+    Route::get('/users/{user_id}/videos', GetUserVideosController::class)->name('users.videos');
 });
