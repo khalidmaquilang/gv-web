@@ -9,7 +9,7 @@ use App\Features\Music\Data\MusicData;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class MusicController extends Controller
+class MusicsController extends Controller
 {
     public function __construct(protected GetMusicsAction $get_musics_action) {}
 

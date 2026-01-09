@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Features\Music\Models;
 
 use App\Features\Music\Enums\MusicStatusEnum;
+use App\Features\Music\Enums\MusicTypeEnum;
 use App\Features\Webhook\Enums\WebhookEnum;
 use App\Features\Webhook\Models\Interfaces\FfmpegInterface;
 use Illuminate\Database\Eloquent\Builder;
@@ -22,6 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property MusicStatusEnum $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property MusicTypeEnum $type
  * @property-read string $duration_formatted
  *
  * @method static Builder<static>|Music newModelQuery()
@@ -48,6 +50,7 @@ class Music extends Model implements FfmpegInterface
     protected $casts = [
         'active' => 'boolean',
         'status' => MusicStatusEnum::class,
+        'type' => MusicTypeEnum::class,
     ];
 
     public function getDurationFormattedAttribute(): string

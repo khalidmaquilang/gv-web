@@ -1,6 +1,7 @@
 <?php
 
 use App\Features\Music\Enums\MusicStatusEnum;
+use App\Features\Music\Enums\MusicTypeEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,6 +19,7 @@ return new class extends Migration
             $table->string('artist');
             $table->string('path');
             $table->string('thumbnail')->nullable();
+            $table->enum('type', MusicTypeEnum::toArray());
             $table->boolean('active')->default(true);
             $table->unsignedInteger('duration')->nullable()->index()->comment('in seconds');
             $table->enum('status', MusicStatusEnum::toArray())->default(MusicStatusEnum::Processing);
