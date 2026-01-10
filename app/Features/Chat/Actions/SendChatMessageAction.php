@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Features\Chat\Actions;
 
 use App\Features\Chat\Data\SendChatMessageData;
+use App\Features\Chat\Events\MessageSent;
 use App\Features\Chat\Models\Chat;
 
 class SendChatMessageAction
@@ -21,6 +22,12 @@ class SendChatMessageAction
             'message' => $data->message,
             'is_read' => false,
         ]);
+
+        // Load relationships for broadcasting
+        $chat->load(['sender', 'receiver']);
+
+        // Broadcast the message to the receiver
+        broadcast(new MessageSent($chat))->toOthers();
 
         return $chat->id;
     }

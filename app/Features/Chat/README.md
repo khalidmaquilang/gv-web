@@ -130,6 +130,36 @@ app/Features/Chat/
 
 4. **Automatic Route Registration**: Routes are automatically registered via the bootstrap/app.php configuration.
 
+5. **Real-time Broadcasting**: Messages and read receipts are broadcast in real-time to connected clients. See [BROADCASTING.md](BROADCASTING.md) for setup details.
+
+## Broadcasting
+
+The Chat API includes real-time broadcasting support for instant message delivery and read receipts.
+
+### Events
+
+- **MessageSent** - Broadcasts to receiver when a new message is sent
+- **MessageRead** - Broadcasts to sender when their message is read
+
+### Quick Start
+
+1. Configure your broadcasting driver in `.env`:
+   ```env
+   BROADCAST_DRIVER=reverb  # or pusher, redis, etc.
+   ```
+
+2. Set up Laravel Echo on the frontend to listen for events
+
+3. Subscribe to your user's private channel:
+   ```javascript
+   Echo.private(`chat.user.${userId}`)
+       .listen('.message.sent', (event) => {
+           // Handle new message
+       });
+   ```
+
+**For complete setup instructions, see [BROADCASTING.md](BROADCASTING.md)**
+
 ## Testing
 
 The Chat feature includes comprehensive test coverage for all actions and models.
@@ -143,6 +173,9 @@ app/Features/Chat/Tests/
 │   ├── SendChatMessageActionTest.php
 │   ├── MarkChatAsReadActionTest.php
 │   └── GetUnreadCountActionTest.php
+├── Events/
+│   ├── MessageSentTest.php
+│   └── MessageReadTest.php
 └── Models/
     └── ChatTest.php
 ```
@@ -217,6 +250,22 @@ php artisan test --filter ChatTest
 - Timestamps
 - Mass assignment
 - Long message storage
+
+**MessageSentTest** covers:
+- ShouldBroadcast interface implementation
+- Broadcasting on private receiver channel
+- Correct broadcast event name
+- Complete broadcast data structure
+- Sender information inclusion
+- ISO 8601 timestamp formatting
+
+**MessageReadTest** covers:
+- ShouldBroadcast interface implementation
+- Broadcasting on private sender channel
+- Correct broadcast event name
+- Minimal read receipt data
+- ISO 8601 timestamp formatting
+- Exclusion of message content for privacy
 
 ## Next Steps
 

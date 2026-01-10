@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Features\Chat\Actions;
 
+use App\Features\Chat\Events\MessageRead;
 use App\Features\Chat\Models\Chat;
 
 class MarkChatAsReadAction
@@ -20,5 +21,8 @@ class MarkChatAsReadAction
             ->firstOrFail();
 
         $chat->markAsRead();
+
+        // Broadcast the read receipt to the sender
+        broadcast(new MessageRead($chat))->toOthers();
     }
 }
