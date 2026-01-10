@@ -14,8 +14,10 @@ class GetUserDataAction
     public function handle(User $user): UserData
     {
         $current_user = auth()->user();
+        abort_if($current_user === null, 404);
 
         $is_following = $current_user->isFollowing($user);
+        $is_followed_by = $current_user->isFollowedBy($user);
 
         $followers_count = $user->followers()->count();
         $following_count = $user->followings()->count();
@@ -33,6 +35,7 @@ class GetUserDataAction
             username: $user->username,
             avatar: $user->avatar,
             is_following: $is_following,
+            you_are_followed: $is_followed_by,
             followers_count: $followers_count,
             following_count: $following_count,
             likes_count: $likes_count,

@@ -16,6 +16,7 @@ class UserData extends Data
         public string $username,
         public ?string $avatar,
         public bool $is_following = false,
+        public bool $you_are_followed = false,
         public int $followers_count = 0,
         public int $following_count = 0,
         public int $likes_count = 0,
