@@ -27,7 +27,7 @@ final class MessageSentTest extends TestCase
 
     public function test_it_implements_should_broadcast_interface(): void
     {
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->sender->id,
             'receiver_id' => $this->receiver->id,
             'message' => 'Test message',
@@ -40,7 +40,7 @@ final class MessageSentTest extends TestCase
 
     public function test_it_broadcasts_on_private_receiver_channel(): void
     {
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->sender->id,
             'receiver_id' => $this->receiver->id,
             'message' => 'Test message',
@@ -56,7 +56,7 @@ final class MessageSentTest extends TestCase
 
     public function test_it_has_correct_broadcast_name(): void
     {
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->sender->id,
             'receiver_id' => $this->receiver->id,
             'message' => 'Test message',
@@ -71,7 +71,7 @@ final class MessageSentTest extends TestCase
     {
         $conversation = \App\Features\Chat\Models\Conversation::create(['type' => 'direct']);
 
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'conversation_id' => $conversation->id,
             'sender_id' => $this->sender->id,
             'receiver_id' => $this->receiver->id,
@@ -101,7 +101,7 @@ final class MessageSentTest extends TestCase
 
     public function test_broadcast_data_includes_sender_information(): void
     {
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->sender->id,
             'receiver_id' => $this->receiver->id,
             'message' => 'Test message',
@@ -124,7 +124,7 @@ final class MessageSentTest extends TestCase
 
     public function test_created_at_is_formatted_as_iso_string(): void
     {
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->sender->id,
             'receiver_id' => $this->receiver->id,
             'message' => 'Test message',

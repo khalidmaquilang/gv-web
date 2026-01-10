@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('chats', function (Blueprint $table): void {
             $table->uuid('id')->primary();
-            $table->foreignUuid('conversation_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignUuid('conversation_id')->constrained()->cascadeOnDelete();
             $table->foreignUuid('sender_id')->constrained('users')->cascadeOnDelete();
             $table->foreignUuid('receiver_id')->constrained('users')->cascadeOnDelete();
             $table->text('message');

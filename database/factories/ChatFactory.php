@@ -15,10 +15,26 @@ class ChatFactory extends Factory
 
     public function definition(): array
     {
+        $sender = User::factory()->create();
+        $receiver = User::factory()->create();
+        $conversation = Conversation::factory()->create(['type' => 'direct']);
+
+        // Attach both users to the conversation
+        $conversation->users()->attach([
+            $sender->id => [
+                'id' => (string) \Illuminate\Support\Str::uuid(),
+                'joined_at' => now(),
+            ],
+            $receiver->id => [
+                'id' => (string) \Illuminate\Support\Str::uuid(),
+                'joined_at' => now(),
+            ],
+        ]);
+
         return [
-            'conversation_id' => Conversation::factory(),
-            'sender_id' => User::factory(),
-            'receiver_id' => User::factory(),
+            'conversation_id' => $conversation->id,
+            'sender_id' => $sender->id,
+            'receiver_id' => $receiver->id,
             'message' => $this->faker->sentence(),
             'is_read' => false,
         ];

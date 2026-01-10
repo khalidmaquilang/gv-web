@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Features\Chat\Models;
 
 use App\Features\User\Models\User;
+use Database\Factories\ChatFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -38,27 +39,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Chat extends Model
 {
+    /** @use HasFactory<ChatFactory> */
     use HasFactory;
+
     use HasUuids;
 
-    protected $fillable = [
-        'conversation_id',
-        'sender_id',
-        'receiver_id',
-        'message',
-        'is_read',
-        'read_at',
-    ];
-
+    /**
+     * @var array<string, string>
+     */
     protected $casts = [
         'is_read' => 'boolean',
         'read_at' => 'datetime',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
     ];
 
     /**
-     * Get the conversation this message belongs to
+     * @return BelongsTo<Conversation, $this>
      */
     public function conversation(): BelongsTo
     {
@@ -66,7 +61,7 @@ class Chat extends Model
     }
 
     /**
-     * Get the sender of the message
+     * @return BelongsTo<User, $this>
      */
     public function sender(): BelongsTo
     {
@@ -94,10 +89,7 @@ class Chat extends Model
         }
     }
 
-    /**
-     * Create a new factory instance for the model.
-     */
-    protected static function newFactory()
+    protected static function newFactory(): ChatFactory
     {
         return \Database\Factories\ChatFactory::new();
     }

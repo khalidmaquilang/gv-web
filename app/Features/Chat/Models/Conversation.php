@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Features\Chat\Models;
 
+use App\Features\Chat\Enums\ConversationType;
 use App\Features\User\Models\User;
+use Database\Factories\ConversationFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,23 +18,21 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Conversation extends Model
 {
+    /** @use HasFactory<ConversationFactory> */
     use HasFactory;
+
     use HasUuids;
     use SoftDeletes;
 
-    protected $fillable = [
-        'type',
-        'name',
-    ];
-
+    /**
+     * @var array<string, string>
+     */
     protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-        'deleted_at' => 'datetime',
+        'type' => ConversationType::class,
     ];
 
     /**
-     * Get all users in this conversation
+     * @return BelongsToMany<User, $this>
      */
     public function users(): BelongsToMany
     {
@@ -42,7 +42,7 @@ class Conversation extends Model
     }
 
     /**
-     * Get all messages in this conversation
+     * @return HasMany<Chat, $this>
      */
     public function messages(): HasMany
     {
@@ -50,7 +50,7 @@ class Conversation extends Model
     }
 
     /**
-     * Get the latest message in this conversation
+     * @return HasOne<Chat, $this>
      */
     public function latestMessage(): HasOne
     {
@@ -58,7 +58,8 @@ class Conversation extends Model
     }
 
     /**
-     * Scope to get only direct conversations
+     * @param  Builder<static>  $query
+     * @return Builder<static>
      */
     public function scopeDirect(Builder $query): Builder
     {
@@ -66,7 +67,8 @@ class Conversation extends Model
     }
 
     /**
-     * Scope to get only group conversations
+     * @param  Builder<static>  $query
+     * @return Builder<static>
      */
     public function scopeGroup(Builder $query): Builder
     {
@@ -74,7 +76,8 @@ class Conversation extends Model
     }
 
     /**
-     * Scope to get conversations for a specific user
+     * @param  Builder<static>  $query
+     * @return Builder<static>
      */
     public function scopeForUser(Builder $query, string $userId): Builder
     {

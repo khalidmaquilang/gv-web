@@ -44,14 +44,14 @@ final class GetUnreadCountActionTest extends TestCase
         ]);
 
         // Create 2 unread messages
-        Chat::create([
+        Chat::factory()->create([
             'conversation_id' => $conversation->id,
             'sender_id' => $this->otherUser->id,
             'receiver_id' => $this->user->id,
             'message' => 'Message 1',
         ]);
 
-        Chat::create([
+        Chat::factory()->create([
             'conversation_id' => $conversation->id,
             'sender_id' => $this->otherUser->id,
             'receiver_id' => $this->user->id,

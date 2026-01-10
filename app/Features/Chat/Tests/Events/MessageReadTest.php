@@ -27,7 +27,7 @@ final class MessageReadTest extends TestCase
 
     public function test_it_implements_should_broadcast_interface(): void
     {
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->sender->id,
             'receiver_id' => $this->receiver->id,
             'message' => 'Test message',
@@ -42,7 +42,7 @@ final class MessageReadTest extends TestCase
 
     public function test_it_broadcasts_on_private_sender_channel(): void
     {
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->sender->id,
             'receiver_id' => $this->receiver->id,
             'message' => 'Test message',
@@ -60,7 +60,7 @@ final class MessageReadTest extends TestCase
 
     public function test_it_has_correct_broadcast_name(): void
     {
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->sender->id,
             'receiver_id' => $this->receiver->id,
             'message' => 'Test message',
@@ -75,7 +75,7 @@ final class MessageReadTest extends TestCase
 
     public function test_it_broadcasts_with_correct_data(): void
     {
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->sender->id,
             'receiver_id' => $this->receiver->id,
             'message' => 'Test message',
@@ -98,7 +98,7 @@ final class MessageReadTest extends TestCase
 
     public function test_read_at_is_formatted_as_iso_string(): void
     {
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->sender->id,
             'receiver_id' => $this->receiver->id,
             'message' => 'Test message',
@@ -116,7 +116,7 @@ final class MessageReadTest extends TestCase
 
     public function test_broadcast_data_does_not_include_message_content(): void
     {
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->sender->id,
             'receiver_id' => $this->receiver->id,
             'message' => 'Test message',
@@ -133,7 +133,7 @@ final class MessageReadTest extends TestCase
 
     public function test_it_only_broadcasts_essential_read_receipt_data(): void
     {
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->sender->id,
             'receiver_id' => $this->receiver->id,
             'message' => 'Test message',
