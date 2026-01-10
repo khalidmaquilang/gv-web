@@ -45,6 +45,7 @@ class VideoUploadAction
                     model_type: Video::class,
                     file_path: $video->video_path,
                     is_video: true,
+                    from_camera: $data->from_camera,
                     music_path: $video->music->path ?? null,
                     user_id: $user_id,
                 );

@@ -18,6 +18,7 @@ class VideoUploadData extends Data
         public ?array $images = null,
         public ?string $music_id = null,
         public ?string $title = null,
+        public bool $from_camera
     ) {}
 
     public static function rules(): array

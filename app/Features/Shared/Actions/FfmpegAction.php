@@ -9,7 +9,15 @@ use Log;
 
 class FfmpegAction
 {
-    public function handle(string $model_id, string $model_type, string $file_path, bool $is_video, ?string $music_path = null, ?string $user_id = null): bool
+    public function handle(
+        string $model_id,
+        string $model_type,
+        string $file_path,
+        bool $is_video,
+        bool $from_camera = false,
+        ?string $music_path = null,
+        ?string $user_id = null
+    ): bool
     {
         $client = new LambdaClient([
             'version' => 'latest',
@@ -27,6 +35,7 @@ class FfmpegAction
             'isVideo' => $is_video,
             'musicFilename' => $music_path,
             'userId' => $user_id,
+            'fromCamera' => $from_camera,
         ];
 
         try {
