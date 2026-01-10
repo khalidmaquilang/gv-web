@@ -21,7 +21,7 @@ class FollowUserAction
 
         // Follow if not already following
         if (! $currentUser->isFollowing($userToFollow)) {
-            $currentUser->following()->attach($userToFollow->id);
+            $currentUser->follow($userToFollow);
         }
 
         return $userToFollow->fresh();

@@ -18,7 +18,7 @@ class UnfollowUserAction
 
         // Unfollow if currently following
         if ($currentUser->isFollowing($userToUnfollow)) {
-            $currentUser->following()->detach($userToUnfollow->id);
+            $currentUser->unfollow($userToUnfollow);
         }
 
         return $userToUnfollow->fresh();
