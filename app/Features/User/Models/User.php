@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Features\User\Models;
 
+use App\Features\User\Concerns\GvCoinConcernTrait;
+use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Interfaces\WalletFloat;
 use Binafy\LaravelReaction\Traits\Reactor;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
@@ -33,10 +36,25 @@ use Laravel\Sanctum\HasApiTokens;
  * @property-read int|null $followers_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $following
  * @property-read int|null $following_count
+ * @property-read non-empty-string $balance
+ * @property-read non-empty-string $balance_float
+ * @property-read float $balance_float_num
+ * @property-read int $balance_int
+ * @property-read \Bavix\Wallet\Models\Wallet $wallet
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Bavix\Wallet\Models\Transfer> $receivedTransfers
+ * @property-read int|null $received_transfers_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Bavix\Wallet\Models\Transaction> $transactions
+ * @property-read int|null $transactions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Bavix\Wallet\Models\Transfer> $transfers
+ * @property-read int|null $transfers_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Bavix\Wallet\Models\Transaction> $walletTransactions
+ * @property-read int|null $wallet_transactions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Bavix\Wallet\Models\Wallet> $wallets
+ * @property-read int|null $wallets_count
  *
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
@@ -58,8 +76,9 @@ use Laravel\Sanctum\HasApiTokens;
  *
  * @mixin \Eloquent
  */
-class User extends Authenticatable implements FilamentUser, MustVerifyEmail
+class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Wallet, WalletFloat
 {
+    use GvCoinConcernTrait;
     use HasApiTokens;
     use HasFactory;
     use HasUuids;
