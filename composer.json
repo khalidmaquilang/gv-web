@@ -9,6 +9,7 @@
         "php": "^8.2",
         "aws/aws-sdk-php": "^3.368",
         "bangnokia/laravel-bunny-storage": "^2.0",
+        "bavix/laravel-wallet": "^11.4",
         "binafy/laravel-reactions": "^1.0",
         "codewithdennis/filament-lucide-icons": "^4.0",
         "filament/filament": "^4.0",
@@ -16,6 +17,7 @@
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
+        "overtrue/laravel-follow": "^5.3",
         "spatie/laravel-data": "^4.18"
     },
     "require-dev": {

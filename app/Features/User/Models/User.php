@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Features\User\Models;
 
+use App\Features\User\Concerns\GvCoinConcernTrait;
+use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Interfaces\WalletFloat;
 use Binafy\LaravelReaction\Traits\Reactor;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
@@ -14,6 +17,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
+use Overtrue\LaravelFollow\Traits\Followable;
+use Overtrue\LaravelFollow\Traits\Follower;
 
 /**
  * @property string $id
@@ -29,18 +34,46 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $approvedFollowers
+ * @property-read int|null $approved_followers_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Overtrue\LaravelFollow\Followable> $approvedFollowings
+ * @property-read int|null $approved_followings_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Overtrue\LaravelFollow\Followable> $followables
+ * @property-read int|null $followables_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $followers
  * @property-read int|null $followers_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $following
- * @property-read int|null $following_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Overtrue\LaravelFollow\Followable> $followings
+ * @property-read int|null $followings_count
+ * @property-read non-empty-string $balance
+ * @property-read non-empty-string $balance_float
+ * @property-read float $balance_float_num
+ * @property-read int $balance_int
+ * @property-read \Bavix\Wallet\Models\Wallet $wallet
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $notApprovedFollowers
+ * @property-read int|null $not_approved_followers_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Overtrue\LaravelFollow\Followable> $notApprovedFollowings
+ * @property-read int|null $not_approved_followings_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Bavix\Wallet\Models\Transfer> $receivedTransfers
+ * @property-read int|null $received_transfers_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Bavix\Wallet\Models\Transaction> $transactions
+ * @property-read int|null $transactions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Bavix\Wallet\Models\Transfer> $transfers
+ * @property-read int|null $transfers_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Bavix\Wallet\Models\Transaction> $walletTransactions
+ * @property-read int|null $wallet_transactions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Bavix\Wallet\Models\Wallet> $wallets
+ * @property-read int|null $wallets_count
  *
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User orderByFollowersCount(string $direction = 'desc')
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User orderByFollowersCountAsc()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User orderByFollowersCountDesc()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereAllowLive($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereAvatar($value)
@@ -58,8 +91,11 @@ use Laravel\Sanctum\HasApiTokens;
  *
  * @mixin \Eloquent
  */
-class User extends Authenticatable implements FilamentUser, MustVerifyEmail
+class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Wallet, WalletFloat
 {
+    use Followable;
+    use Follower;
+    use GvCoinConcernTrait;
     use HasApiTokens;
     use HasFactory;
     use HasUuids;
@@ -113,32 +149,6 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
             'password' => 'hashed',
             'allow_live' => 'boolean',
         ];
-    }
-
-    /**
-     * Users that this user is following
-     */
-    public function following()
-    {
-        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'following_id')
-            ->withTimestamps();
-    }
-
-    /**
-     * Users that are following this user
-     */
-    public function followers()
-    {
-        return $this->belongsToMany(User::class, 'followers', 'following_id', 'follower_id')
-            ->withTimestamps();
-    }
-
-    /**
-     * Check if this user is following another user
-     */
-    public function isFollowing(User $user): bool
-    {
-        return $this->following()->where('following_id', $user->id)->exists();
     }
 
     public function canAccessPanel(Panel $panel): bool

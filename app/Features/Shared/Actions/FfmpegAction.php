@@ -17,8 +17,7 @@ class FfmpegAction
         bool $from_camera = false,
         ?string $music_path = null,
         ?string $user_id = null
-    ): bool
-    {
+    ): bool {
         $client = new LambdaClient([
             'version' => 'latest',
             'region' => config('services.aws.region'), // Your Lambda region
