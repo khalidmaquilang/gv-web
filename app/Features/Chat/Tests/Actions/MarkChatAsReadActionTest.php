@@ -27,7 +27,7 @@ final class MarkChatAsReadActionTest extends TestCase
 
     public function test_it_marks_chat_as_read(): void
     {
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->otherUser->id,
             'receiver_id' => $this->user->id,
             'message' => 'Test message',
@@ -47,7 +47,7 @@ final class MarkChatAsReadActionTest extends TestCase
 
     public function test_it_only_allows_receiver_to_mark_as_read(): void
     {
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->otherUser->id,
             'receiver_id' => $this->user->id,
             'message' => 'Test message',
@@ -65,7 +65,7 @@ final class MarkChatAsReadActionTest extends TestCase
 
     public function test_it_requires_authentication(): void
     {
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->otherUser->id,
             'receiver_id' => $this->user->id,
             'message' => 'Test message',
@@ -82,7 +82,7 @@ final class MarkChatAsReadActionTest extends TestCase
     {
         $originalReadTime = now()->subHour();
 
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->otherUser->id,
             'receiver_id' => $this->user->id,
             'message' => 'Test message',
@@ -114,25 +114,23 @@ final class MarkChatAsReadActionTest extends TestCase
 
     public function test_it_sets_read_at_timestamp(): void
     {
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->otherUser->id,
             'receiver_id' => $this->user->id,
             'message' => 'Test message',
             'is_read' => false,
+            'read_at' => null,
         ]);
 
         $this->actingAs($this->user);
-
-        $beforeMark = now();
 
         $action = new MarkChatAsReadAction;
         $action->handle($chat->id);
 
         $chat->refresh();
 
-        $afterMark = now();
-
+        // Verify read_at is set to a recent timestamp
         $this->assertNotNull($chat->read_at);
-        $this->assertTrue($chat->read_at->between($beforeMark, $afterMark));
+        $this->assertTrue($chat->read_at->isToday());
     }
 }

@@ -18,8 +18,15 @@ class MarkChatAsReadAction
         $chat = Chat::query()
             ->where('id', $chat_id)
             ->where('receiver_id', $user_id)
+            ->with('conversation')
             ->firstOrFail();
 
+        // Update the user's last_read_at timestamp in the conversation_user pivot
+        $chat->conversation->users()->updateExistingPivot($user_id, [
+            'last_read_at' => now(),
+        ]);
+
+        // Also mark the individual message as read for backward compatibility
         $chat->markAsRead();
 
         // Broadcast the read receipt to the sender

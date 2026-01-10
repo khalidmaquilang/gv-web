@@ -51,7 +51,7 @@ final class MessageSentTest extends TestCase
 
         $this->assertCount(1, $channels);
         $this->assertInstanceOf(\Illuminate\Broadcasting\PrivateChannel::class, $channels[0]);
-        $this->assertEquals('chat.user.'.$this->receiver->id, $channels[0]->name);
+        $this->assertEquals('private-chat.user.'.$this->receiver->id, $channels[0]->name);
     }
 
     public function test_it_has_correct_broadcast_name(): void
@@ -69,10 +69,14 @@ final class MessageSentTest extends TestCase
 
     public function test_it_broadcasts_with_correct_data(): void
     {
+        $conversation = \App\Features\Chat\Models\Conversation::create(['type' => 'direct']);
+
         $chat = Chat::create([
+            'conversation_id' => $conversation->id,
             'sender_id' => $this->sender->id,
             'receiver_id' => $this->receiver->id,
             'message' => 'Test message',
+            'is_read' => false,
         ]);
 
         $chat->load(['sender', 'receiver']);

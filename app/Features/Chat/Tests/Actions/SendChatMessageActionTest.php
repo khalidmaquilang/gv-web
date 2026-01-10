@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Features\Chat\Tests\Actions;
 
+use App\Features\Chat\Actions\GetOrCreateConversationAction;
 use App\Features\Chat\Actions\SendChatMessageAction;
 use App\Features\Chat\Data\SendChatMessageData;
 use App\Features\Chat\Models\Chat;
+use App\Features\Chat\Models\Conversation;
 use App\Features\User\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -35,7 +37,7 @@ final class SendChatMessageActionTest extends TestCase
             message: 'Hello there!'
         );
 
-        $action = new SendChatMessageAction;
+        $action = new SendChatMessageAction(new GetOrCreateConversationAction);
         $chatId = $action->handle($data);
 
         $this->assertNotNull($chatId);
@@ -57,7 +59,7 @@ final class SendChatMessageActionTest extends TestCase
             message: 'Test message'
         );
 
-        $action = new SendChatMessageAction;
+        $action = new SendChatMessageAction(new GetOrCreateConversationAction);
         $chatId = $action->handle($data);
 
         $chat = Chat::find($chatId);
@@ -75,7 +77,7 @@ final class SendChatMessageActionTest extends TestCase
             message: 'Test message'
         );
 
-        $action = new SendChatMessageAction;
+        $action = new SendChatMessageAction(new GetOrCreateConversationAction);
         $chatId = $action->handle($data);
 
         $chat = Chat::find($chatId);
@@ -92,7 +94,7 @@ final class SendChatMessageActionTest extends TestCase
             message: 'Test message'
         );
 
-        $action = new SendChatMessageAction;
+        $action = new SendChatMessageAction(new GetOrCreateConversationAction);
         $action->handle($data);
     }
 
@@ -105,7 +107,7 @@ final class SendChatMessageActionTest extends TestCase
             message: 'Test message'
         );
 
-        $action = new SendChatMessageAction;
+        $action = new SendChatMessageAction(new GetOrCreateConversationAction);
         $chatId = $action->handle($data);
 
         $this->assertIsString($chatId);
@@ -123,11 +125,57 @@ final class SendChatMessageActionTest extends TestCase
             message: $longMessage
         );
 
-        $action = new SendChatMessageAction;
+        $action = new SendChatMessageAction(new GetOrCreateConversationAction);
         $chatId = $action->handle($data);
 
         $chat = Chat::find($chatId);
 
         $this->assertEquals($longMessage, $chat->message);
+    }
+
+    public function test_it_creates_or_gets_conversation_before_sending_message(): void
+    {
+        $this->actingAs($this->user);
+
+        $data = new SendChatMessageData(
+            receiver_id: $this->otherUser->id,
+            message: 'Hello!'
+        );
+
+        $this->assertCount(0, Conversation::all());
+
+        $action = new SendChatMessageAction(new GetOrCreateConversationAction);
+        $action->handle($data);
+
+        $this->assertCount(1, Conversation::all());
+
+        // Send another message - should use same conversation
+        $data2 = new SendChatMessageData(
+            receiver_id: $this->otherUser->id,
+            message: 'Second message'
+        );
+
+        $action->handle($data2);
+
+        $this->assertCount(1, Conversation::all()); // Still only 1 conversation
+        $this->assertCount(2, Chat::all()); // But 2 messages
+    }
+
+    public function test_it_associates_message_with_conversation(): void
+    {
+        $this->actingAs($this->user);
+
+        $data = new SendChatMessageData(
+            receiver_id: $this->otherUser->id,
+            message: 'Test message'
+        );
+
+        $action = new SendChatMessageAction(new GetOrCreateConversationAction);
+        $chatId = $action->handle($data);
+
+        $chat = Chat::find($chatId);
+
+        $this->assertNotNull($chat->conversation_id);
+        $this->assertInstanceOf(Conversation::class, $chat->conversation);
     }
 }

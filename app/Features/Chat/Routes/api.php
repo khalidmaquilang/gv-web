@@ -1,12 +1,16 @@
 <?php
 
 use App\Features\Chat\Controllers\ChatsController;
+use App\Features\Chat\Controllers\ConversationsController;
 use App\Features\Chat\Controllers\MarkChatAsReadController;
 use App\Features\Chat\Controllers\SendChatMessageController;
 use App\Features\Chat\Controllers\UnreadCountController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function (): void {
+    // Get list of conversations
+    Route::get('/chats/conversations', ConversationsController::class);
+
     // Get chat messages with a specific user
     Route::get('/chats/{user_id}', ChatsController::class);
 

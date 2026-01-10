@@ -55,7 +55,7 @@ final class MessageReadTest extends TestCase
 
         $this->assertCount(1, $channels);
         $this->assertInstanceOf(\Illuminate\Broadcasting\PrivateChannel::class, $channels[0]);
-        $this->assertEquals('chat.user.'.$this->sender->id, $channels[0]->name);
+        $this->assertEquals('private-chat.user.'.$this->sender->id, $channels[0]->name);
     }
 
     public function test_it_has_correct_broadcast_name(): void
