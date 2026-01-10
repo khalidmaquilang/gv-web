@@ -5,6 +5,9 @@
          colors="true"
 >
     <testsuites>
+        <testsuite name="Chat">
+            <directory>app/Features/Chat/Tests</directory>
+        </testsuite>
         <testsuite name="Feed">
             <directory>app/Features/Feed/Tests</directory>
         </testsuite>
