@@ -81,7 +81,7 @@ final class MarkChatAsReadActionTest extends TestCase
     public function test_it_handles_already_read_messages(): void
     {
         $originalReadTime = now()->subHour();
-        
+
         $chat = Chat::create([
             'sender_id' => $this->otherUser->id,
             'receiver_id' => $this->user->id,

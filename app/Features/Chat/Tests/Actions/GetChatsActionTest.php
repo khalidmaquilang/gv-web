@@ -92,7 +92,7 @@ final class GetChatsActionTest extends TestCase
         $chat1->created_at = now()->subHours(2);
         $chat1->save();
 
-        $chat2 = Chat::create([
+        Chat::create([
             'sender_id' => $this->otherUser->id,
             'receiver_id' => $this->user->id,
             'message' => 'New message',
@@ -170,10 +170,10 @@ final class GetChatsActionTest extends TestCase
         $result = $action->handle($this->otherUser->id);
 
         $this->assertCount(2, $result->items());
-        
+
         $readChat = collect($result->items())->firstWhere('message', 'Read message');
         $unreadChat = collect($result->items())->firstWhere('message', 'Unread message');
-        
+
         $this->assertTrue($readChat->is_read);
         $this->assertNotNull($readChat->read_at);
         $this->assertFalse($unreadChat->is_read);

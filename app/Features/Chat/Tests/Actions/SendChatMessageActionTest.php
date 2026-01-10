@@ -61,7 +61,7 @@ final class SendChatMessageActionTest extends TestCase
         $chatId = $action->handle($data);
 
         $chat = Chat::find($chatId);
-        
+
         $this->assertFalse($chat->is_read);
         $this->assertNull($chat->read_at);
     }
@@ -79,7 +79,7 @@ final class SendChatMessageActionTest extends TestCase
         $chatId = $action->handle($data);
 
         $chat = Chat::find($chatId);
-        
+
         $this->assertEquals($this->user->id, $chat->sender_id);
     }
 
@@ -117,7 +117,7 @@ final class SendChatMessageActionTest extends TestCase
         $this->actingAs($this->user);
 
         $longMessage = str_repeat('This is a very long message. ', 100);
-        
+
         $data = new SendChatMessageData(
             receiver_id: $this->otherUser->id,
             message: $longMessage
@@ -127,7 +127,7 @@ final class SendChatMessageActionTest extends TestCase
         $chatId = $action->handle($data);
 
         $chat = Chat::find($chatId);
-        
+
         $this->assertEquals($longMessage, $chat->message);
     }
 }
