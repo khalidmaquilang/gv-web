@@ -20,11 +20,11 @@ trait GvCoinConcernTrait
                 'slug' => 'gv-coins',
             ]);
 
-            return $wallet->balanceFloat;
+            return $wallet->balanceFloatNum;
         }
 
         $wallet = $this->getWallet('gv-coins');
 
-        return $wallet->balanceFloat;
+        return $wallet->balanceFloatNum;
     }
 }
