@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Features\User\Models;
 
-use App\Features\User\Concerns\FollowConcernTrait;
 use App\Features\User\Concerns\GvCoinConcernTrait;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Interfaces\WalletFloat;
@@ -18,6 +17,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
+use Overtrue\LaravelFollow\Traits\Followable;
+use Overtrue\LaravelFollow\Traits\Follower;
 
 /**
  * @property string $id
@@ -92,7 +93,8 @@ use Laravel\Sanctum\HasApiTokens;
  */
 class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Wallet, WalletFloat
 {
-    use FollowConcernTrait;
+    use Followable;
+    use Follower;
     use GvCoinConcernTrait;
     use HasApiTokens;
     use HasFactory;
