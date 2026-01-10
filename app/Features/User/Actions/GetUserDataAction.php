@@ -15,13 +15,10 @@ class GetUserDataAction
     {
         $current_user = auth()->user();
 
-        $is_following = false;
-        if ($current_user && $current_user->id !== $user->id && method_exists($current_user, 'is_following')) {
-            $is_following = $current_user->is_following($user);
-        }
+        $is_following = $current_user->isFollowing($user);
 
         $followers_count = $user->followers()->count();
-        $following_count = $user->following()->count();
+        $following_count = $user->followings()->count();
 
         $likes_count = Reaction::query()
             ->whereHasMorph('reactable', [Feed::class], function ($query, string $type) use ($user): void {
