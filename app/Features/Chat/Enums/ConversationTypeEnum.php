@@ -6,7 +6,7 @@ namespace App\Features\Chat\Enums;
 
 use App\Features\Shared\Enums\Traits\EnumArrayTrait;
 
-enum ConversationType: string
+enum ConversationTypeEnum: string
 {
     use EnumArrayTrait;
 

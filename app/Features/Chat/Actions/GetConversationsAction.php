@@ -10,12 +10,9 @@ use Illuminate\Contracts\Pagination\CursorPaginator;
 class GetConversationsAction
 {
     /**
-     * Get paginated list of conversations for the authenticated user
-     *
-     * @param  string|null  $cursor  Cursor for pagination
-     * @param  int  $perPage  Number of items per page
+     * @return CursorPaginator<Conversation>
      */
-    public function handle(?string $cursor = null, int $perPage = 20): CursorPaginator
+    public function handle(): CursorPaginator
     {
         /** @var ?string $user_id */
         $user_id = auth()->id();
@@ -25,6 +22,6 @@ class GetConversationsAction
             ->forUser($user_id)
             ->with(['latestMessage.sender', 'latestMessage.receiver', 'users'])
             ->orderBy('updated_at', 'desc')
-            ->cursorPaginate($perPage, ['*'], 'cursor', $cursor);
+            ->cursorPaginate(10);
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Features\Chat\Models;
 
-use App\Features\Chat\Enums\ConversationType;
+use App\Features\Chat\Enums\ConversationTypeEnum;
 use App\Features\User\Models\User;
 use Database\Factories\ConversationFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,6 +16,38 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property string $id
+ * @property ConversationTypeEnum $type
+ * @property string|null $name
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \App\Features\Chat\Models\Chat|null $latestMessage
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Features\Chat\Models\Chat> $messages
+ * @property-read int|null $messages_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $users
+ * @property-read int|null $users_count
+ *
+ * @method static Builder<static>|Conversation direct()
+ * @method static \Database\Factories\ConversationFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Conversation forUser(string $userId)
+ * @method static Builder<static>|Conversation group()
+ * @method static Builder<static>|Conversation newModelQuery()
+ * @method static Builder<static>|Conversation newQuery()
+ * @method static Builder<static>|Conversation onlyTrashed()
+ * @method static Builder<static>|Conversation query()
+ * @method static Builder<static>|Conversation whereCreatedAt($value)
+ * @method static Builder<static>|Conversation whereDeletedAt($value)
+ * @method static Builder<static>|Conversation whereId($value)
+ * @method static Builder<static>|Conversation whereName($value)
+ * @method static Builder<static>|Conversation whereType($value)
+ * @method static Builder<static>|Conversation whereUpdatedAt($value)
+ * @method static Builder<static>|Conversation withTrashed(bool $withTrashed = true)
+ * @method static Builder<static>|Conversation withoutTrashed()
+ *
+ * @mixin \Eloquent
+ */
 class Conversation extends Model
 {
     /** @use HasFactory<ConversationFactory> */
@@ -28,7 +60,7 @@ class Conversation extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'type' => ConversationType::class,
+        'type' => ConversationTypeEnum::class,
     ];
 
     /**

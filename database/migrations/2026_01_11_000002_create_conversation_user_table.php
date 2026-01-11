@@ -14,11 +14,11 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('conversation_id')->constrained()->cascadeOnDelete();
             $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
-            $table->timestamp('last_read_at')->nullable();
+            $table->dateTime('last_read_at')->nullable();
             $table->boolean('is_muted')->default(false);
             $table->boolean('is_archived')->default(false);
-            $table->timestamp('joined_at')->useCurrent();
-            $table->timestamp('left_at')->nullable();
+            $table->dateTime('joined_at')->useCurrent();
+            $table->dateTime('left_at')->nullable();
             $table->timestamps();
 
             $table->unique(['conversation_id', 'user_id']);

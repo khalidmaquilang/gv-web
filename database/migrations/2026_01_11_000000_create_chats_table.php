@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignUuid('receiver_id')->constrained('users')->cascadeOnDelete();
             $table->text('message');
             $table->boolean('is_read')->default(false);
-            $table->timestamp('read_at')->nullable();
+            $table->dateTime('read_at')->nullable();
             $table->timestamps();
 
             // Add indexes for better query performance
