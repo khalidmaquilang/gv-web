@@ -6,6 +6,7 @@ namespace App\Features\User\Data;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Number;
+use Spatie\LaravelData\Attributes\Computed;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Optional;
 
@@ -22,11 +23,14 @@ class UserData extends Data
         public int|Optional $following_count = 0,
         public int|Optional $likes_count = 0,
         public bool|Optional $allow_live = false,
-        public float|Optional $balance = 0,
+        public float|Optional $gv_coins = 0,
         public string|null|Optional $bio = null,
-        public string|null|Optional $formatted_followers_count = null,
-        public string|null|Optional $formatted_following_count = null,
-        public string|null|Optional $formatted_likes_count = null,
+        #[Computed]
+        public ?string $formatted_followers_count = null,
+        #[Computed]
+        public ?string $formatted_following_count = null,
+        #[Computed]
+        public ?string $formatted_likes_count = null,
     ) {
         if ($avatar) {
             $this->avatar = Storage::url($avatar);
