@@ -17,12 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * @property string $id
  * @property ConversationTypeEnum $type
- * @property string|null $name
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \App\Features\Chat\Models\Chat|null $latestMessage
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Features\Chat\Models\Chat> $messages
  * @property-read int|null $messages_count
@@ -37,12 +32,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static Builder<static>|Conversation newQuery()
  * @method static Builder<static>|Conversation onlyTrashed()
  * @method static Builder<static>|Conversation query()
- * @method static Builder<static>|Conversation whereCreatedAt($value)
- * @method static Builder<static>|Conversation whereDeletedAt($value)
- * @method static Builder<static>|Conversation whereId($value)
- * @method static Builder<static>|Conversation whereName($value)
- * @method static Builder<static>|Conversation whereType($value)
- * @method static Builder<static>|Conversation whereUpdatedAt($value)
  * @method static Builder<static>|Conversation withTrashed(bool $withTrashed = true)
  * @method static Builder<static>|Conversation withoutTrashed()
  *

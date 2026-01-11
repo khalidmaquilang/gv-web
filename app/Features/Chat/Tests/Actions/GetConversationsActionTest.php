@@ -106,7 +106,7 @@ final class GetConversationsActionTest extends TestCase
         }
 
         $action = new GetConversationsAction;
-        $result = $action->handle(null, 10);
+        $result = $action->handle();
 
         $this->assertCount(10, $result->items());
     }
@@ -124,14 +124,14 @@ final class GetConversationsActionTest extends TestCase
         }
 
         $action = new GetConversationsAction;
-        $firstPage = $action->handle(null, 3);
+        $firstPage = $action->handle();
 
         $this->assertCount(3, $firstPage->items());
 
         // Get next page using cursor
         if ($firstPage->hasMorePages()) {
             $cursor = $firstPage->nextCursor()?->encode();
-            $secondPage = $action->handle($cursor, 3);
+            $secondPage = $action->handle();
 
             $this->assertCount(2, $secondPage->items());
 

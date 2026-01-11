@@ -1,1 +1,1 @@
-npm run pre-commit-mac
+npm.cmd run pre-commit-windows

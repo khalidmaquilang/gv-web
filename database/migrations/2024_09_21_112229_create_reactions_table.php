@@ -35,7 +35,7 @@ return new class extends Migration
                     ->nullOnDelete();
             }
 
-            $table->morphs('reactable');
+            $table->uuidMorphs('reactable');
             $table->string('type');
             $table->string('ip')->nullable();
 
