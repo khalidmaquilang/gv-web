@@ -10,7 +10,7 @@ use Illuminate\Contracts\Pagination\CursorPaginator;
 class GetChatsAction
 {
     /**
-     * Get chat messages between two users
+     * Get chat messages for a conversation with another user
      *
      * @return CursorPaginator<Chat>
      */
@@ -20,15 +20,10 @@ class GetChatsAction
         $user_id = auth()->id();
         abort_if($user_id === null, 404);
 
+        // Get chats where the conversation includes both users
         return Chat::query()
-            ->where(function ($query) use ($user_id, $other_user_id): void {
-                $query->where('sender_id', $user_id)
-                    ->where('receiver_id', $other_user_id);
-            })
-            ->orWhere(function ($query) use ($user_id, $other_user_id): void {
-                $query->where('sender_id', $other_user_id)
-                    ->where('receiver_id', $user_id);
-            })
+            ->whereHas('conversation.users', fn ($q) => $q->where('user_id', $user_id))
+            ->whereHas('conversation.users', fn ($q) => $q->where('user_id', $other_user_id))
             ->with(['sender', 'receiver'])
             ->latest()
             ->cursorPaginate(20);

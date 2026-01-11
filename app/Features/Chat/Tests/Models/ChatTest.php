@@ -26,7 +26,7 @@ final class ChatTest extends TestCase
 
     public function test_it_has_sender_relationship(): void
     {
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->sender->id,
             'receiver_id' => $this->receiver->id,
             'message' => 'Test message',
@@ -38,7 +38,7 @@ final class ChatTest extends TestCase
 
     public function test_it_has_receiver_relationship(): void
     {
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->sender->id,
             'receiver_id' => $this->receiver->id,
             'message' => 'Test message',
@@ -50,7 +50,7 @@ final class ChatTest extends TestCase
 
     public function test_it_uses_uuid_for_primary_key(): void
     {
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->sender->id,
             'receiver_id' => $this->receiver->id,
             'message' => 'Test message',
@@ -62,7 +62,7 @@ final class ChatTest extends TestCase
 
     public function test_it_casts_is_read_to_boolean(): void
     {
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->sender->id,
             'receiver_id' => $this->receiver->id,
             'message' => 'Test message',
@@ -75,7 +75,7 @@ final class ChatTest extends TestCase
 
     public function test_it_casts_read_at_to_datetime(): void
     {
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->sender->id,
             'receiver_id' => $this->receiver->id,
             'message' => 'Test message',
@@ -88,7 +88,7 @@ final class ChatTest extends TestCase
 
     public function test_mark_as_read_method_updates_status(): void
     {
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->sender->id,
             'receiver_id' => $this->receiver->id,
             'message' => 'Test message',
@@ -107,7 +107,7 @@ final class ChatTest extends TestCase
 
     public function test_mark_as_read_method_is_idempotent(): void
     {
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->sender->id,
             'receiver_id' => $this->receiver->id,
             'message' => 'Test message',
@@ -129,7 +129,7 @@ final class ChatTest extends TestCase
 
     public function test_it_has_timestamps(): void
     {
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->sender->id,
             'receiver_id' => $this->receiver->id,
             'message' => 'Test message',
@@ -141,7 +141,7 @@ final class ChatTest extends TestCase
 
     public function test_it_allows_mass_assignment_of_fillable_attributes(): void
     {
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->sender->id,
             'receiver_id' => $this->receiver->id,
             'message' => 'Test message',
@@ -160,7 +160,7 @@ final class ChatTest extends TestCase
     {
         $longMessage = str_repeat('This is a test message. ', 500);
 
-        $chat = Chat::create([
+        $chat = Chat::factory()->create([
             'sender_id' => $this->sender->id,
             'receiver_id' => $this->receiver->id,
             'message' => $longMessage,

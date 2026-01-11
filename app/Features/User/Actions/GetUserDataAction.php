@@ -40,7 +40,7 @@ class GetUserDataAction
             following_count: $following_count,
             likes_count: $likes_count,
             allow_live: $user->allow_live,
-            balance: $current_user->id === $user->id ? $user->getGvCoins() : 0,
+            gv_coins: $current_user->id === $user->id ? $user->getGvCoins() : 0,
             bio: $user->bio,
         );
     }

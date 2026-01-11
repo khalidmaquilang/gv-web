@@ -11,18 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('chats', function (Blueprint $table) {
+        Schema::create('chats', function (Blueprint $table): void {
             $table->uuid('id')->primary();
+            $table->foreignUuid('conversation_id')->constrained()->cascadeOnDelete();
             $table->foreignUuid('sender_id')->constrained('users')->cascadeOnDelete();
             $table->foreignUuid('receiver_id')->constrained('users')->cascadeOnDelete();
             $table->text('message');
             $table->boolean('is_read')->default(false);
-            $table->timestamp('read_at')->nullable();
+            $table->dateTime('read_at')->nullable();
             $table->timestamps();
 
             // Add indexes for better query performance
+            $table->index('conversation_id');
             $table->index(['sender_id', 'receiver_id']);
             $table->index(['receiver_id', 'is_read']);
+            $table->index('created_at');
         });
     }
 

@@ -27,14 +27,23 @@ final class GetChatsActionTest extends TestCase
 
     public function test_it_retrieves_chats_between_two_users(): void
     {
-        // Create chats between users
-        $chat1 = Chat::create([
+        // Create a conversation between the two users
+        $conversation = \App\Features\Chat\Models\Conversation::factory()->create(['type' => 'direct']);
+        $conversation->users()->attach([
+            $this->user->id => ['id' => (string) \Illuminate\Support\Str::uuid(), 'joined_at' => now()],
+            $this->otherUser->id => ['id' => (string) \Illuminate\Support\Str::uuid(), 'joined_at' => now()],
+        ]);
+
+        // Create chats in the same conversation
+        $chat1 = Chat::factory()->create([
+            'conversation_id' => $conversation->id,
             'sender_id' => $this->user->id,
             'receiver_id' => $this->otherUser->id,
             'message' => 'Hello from user',
         ]);
 
-        $chat2 = Chat::create([
+        $chat2 = Chat::factory()->create([
+            'conversation_id' => $conversation->id,
             'sender_id' => $this->otherUser->id,
             'receiver_id' => $this->user->id,
             'message' => 'Hello back',
@@ -42,7 +51,7 @@ final class GetChatsActionTest extends TestCase
 
         // Create chat with third user (should be excluded)
         $thirdUser = User::factory()->create();
-        Chat::create([
+        Chat::factory()->create([
             'sender_id' => $this->user->id,
             'receiver_id' => $thirdUser->id,
             'message' => 'Not included',
@@ -61,7 +70,14 @@ final class GetChatsActionTest extends TestCase
 
     public function test_it_eager_loads_sender_and_receiver_relationships(): void
     {
-        Chat::create([
+        $conversation = \App\Features\Chat\Models\Conversation::factory()->create(['type' => 'direct']);
+        $conversation->users()->attach([
+            $this->user->id => ['id' => (string) \Illuminate\Support\Str::uuid(), 'joined_at' => now()],
+            $this->otherUser->id => ['id' => (string) \Illuminate\Support\Str::uuid(), 'joined_at' => now()],
+        ]);
+
+        Chat::factory()->create([
+            'conversation_id' => $conversation->id,
             'sender_id' => $this->user->id,
             'receiver_id' => $this->otherUser->id,
             'message' => 'Test message',
@@ -83,8 +99,15 @@ final class GetChatsActionTest extends TestCase
 
     public function test_it_returns_results_in_descending_order_by_created_at(): void
     {
+        $conversation = \App\Features\Chat\Models\Conversation::factory()->create(['type' => 'direct']);
+        $conversation->users()->attach([
+            $this->user->id => ['id' => (string) \Illuminate\Support\Str::uuid(), 'joined_at' => now()],
+            $this->otherUser->id => ['id' => (string) \Illuminate\Support\Str::uuid(), 'joined_at' => now()],
+        ]);
+
         // Create multiple chats with different timestamps
-        $chat1 = Chat::create([
+        $chat1 = Chat::factory()->create([
+            'conversation_id' => $conversation->id,
             'sender_id' => $this->user->id,
             'receiver_id' => $this->otherUser->id,
             'message' => 'Old message',
@@ -92,7 +115,8 @@ final class GetChatsActionTest extends TestCase
         $chat1->created_at = now()->subHours(2);
         $chat1->save();
 
-        Chat::create([
+        Chat::factory()->create([
+            'conversation_id' => $conversation->id,
             'sender_id' => $this->otherUser->id,
             'receiver_id' => $this->user->id,
             'message' => 'New message',
@@ -110,9 +134,16 @@ final class GetChatsActionTest extends TestCase
 
     public function test_it_paginates_results_with_cursor(): void
     {
+        $conversation = \App\Features\Chat\Models\Conversation::factory()->create(['type' => 'direct']);
+        $conversation->users()->attach([
+            $this->user->id => ['id' => (string) \Illuminate\Support\Str::uuid(), 'joined_at' => now()],
+            $this->otherUser->id => ['id' => (string) \Illuminate\Support\Str::uuid(), 'joined_at' => now()],
+        ]);
+
         // Create 25 chats (more than default 20 per page)
         for ($i = 1; $i <= 25; $i++) {
-            Chat::create([
+            Chat::factory()->create([
+                'conversation_id' => $conversation->id,
                 'sender_id' => $this->user->id,
                 'receiver_id' => $this->otherUser->id,
                 'message' => 'Message '.$i,
@@ -149,14 +180,22 @@ final class GetChatsActionTest extends TestCase
 
     public function test_it_retrieves_chats_with_correct_read_status(): void
     {
-        Chat::create([
+        $conversation = \App\Features\Chat\Models\Conversation::factory()->create(['type' => 'direct']);
+        $conversation->users()->attach([
+            $this->user->id => ['id' => (string) \Illuminate\Support\Str::uuid(), 'joined_at' => now()],
+            $this->otherUser->id => ['id' => (string) \Illuminate\Support\Str::uuid(), 'joined_at' => now()],
+        ]);
+
+        Chat::factory()->create([
+            'conversation_id' => $conversation->id,
             'sender_id' => $this->user->id,
             'receiver_id' => $this->otherUser->id,
             'message' => 'Unread message',
             'is_read' => false,
         ]);
 
-        Chat::create([
+        Chat::factory()->create([
+            'conversation_id' => $conversation->id,
             'sender_id' => $this->otherUser->id,
             'receiver_id' => $this->user->id,
             'message' => 'Read message',

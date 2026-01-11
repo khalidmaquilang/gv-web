@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace App\Features\Chat\Models;
 
 use App\Features\User\Models\User;
+use Database\Factories\ChatFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string $id
+ * @property string $conversation_id
  * @property string $sender_id
  * @property string $receiver_id
  * @property string $message
@@ -18,12 +21,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $read_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read User $sender
+ * @property-read \App\Features\Chat\Models\Conversation $conversation
  * @property-read User $receiver
+ * @property-read User $sender
  *
+ * @method static \Database\Factories\ChatFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Chat newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Chat newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Chat query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Chat whereConversationId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Chat whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Chat whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Chat whereIsRead($value)
@@ -37,20 +43,26 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Chat extends Model
 {
+    /** @use HasFactory<ChatFactory> */
+    use HasFactory;
+
     use HasUuids;
 
-    protected $fillable = [
-        'sender_id',
-        'receiver_id',
-        'message',
-        'is_read',
-        'read_at',
-    ];
-
+    /**
+     * @var array<string, string>
+     */
     protected $casts = [
         'is_read' => 'boolean',
         'read_at' => 'datetime',
     ];
+
+    /**
+     * @return BelongsTo<Conversation, $this>
+     */
+    public function conversation(): BelongsTo
+    {
+        return $this->belongsTo(Conversation::class);
+    }
 
     /**
      * @return BelongsTo<User, $this>
@@ -79,5 +91,10 @@ class Chat extends Model
                 'read_at' => now(),
             ]);
         }
+    }
+
+    protected static function newFactory(): ChatFactory
+    {
+        return \Database\Factories\ChatFactory::new();
     }
 }
