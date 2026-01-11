@@ -24,14 +24,19 @@ class ConversationData extends Data
 
     public static function fromModel(Conversation $conversation): self
     {
-        // Get other participant(s) - manually map to avoid wallet lazy loading
+        $currentUserId = auth()->id();
+        abort_if($currentUserId === null, 404);
+
+        // Get other participant(s) - exclude current user, manually map to avoid wallet lazy loading
         $participants = $conversation->users
+            ->filter(fn ($user): bool => $user->id !== $currentUserId)
             ->map(fn ($user): \App\Features\User\Data\UserData => new UserData(
                 id: $user->id,
                 name: $user->name,
                 username: $user->username,
                 avatar: $user->avatar,
             ))
+            ->values()
             ->all();
 
         // Get last message - manually create to avoid wallet lazy loading
@@ -58,9 +63,6 @@ class ConversationData extends Data
                 created_at: $chat->created_at,
             );
         }
-
-        $currentUserId = auth()->id();
-        abort_if($currentUserId === null, 404);
 
         // Get unread count (messages created after user's last_read_at)
         $userPivot = $conversation->users()
